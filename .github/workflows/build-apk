@@ -10,78 +10,82 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-apk:
+    name: Build Wad Faisal APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: تحميل المشروع
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: إعداد Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: إعداد Java
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
 
-      - name: التأكد من ملفات المشروع
+      - name: Check project
         run: |
+          echo "Checking files..."
           test -f index.html
           test -f script.js
           test -f style.css
-          echo "تم العثور على ملفات المشروع"
+          echo "Project files OK"
 
-      - name: تجهيز ملفات الموقع
+      - name: Create web folder
         run: |
           rm -rf www
-          mkdir www
+          mkdir -p www
           cp index.html www/index.html
           cp script.js www/script.js
           cp style.css www/style.css
 
-      - name: إنشاء package.json
+      - name: Create package.json
         run: |
           cat > package.json <<'EOF'
           {
-            "name": "apply",
+            "name": "wad-faisal",
             "version": "1.0.0",
             "private": true
           }
           EOF
 
-      - name: تثبيت Capacitor
+      - name: Install Capacitor
         run: |
-          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+          npm install @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
 
-      - name: إنشاء إعداد Android
+      - name: Initialize Capacitor
         run: |
-          npx cap init "Apply" "com.sudaneseblack.apply" --web-dir=www
+          npx cap init "ود فيصل" "com.sudaneseblack.wadfaisal" --web-dir=www
 
-      - name: إضافة Android
+      - name: Add Android
         run: |
           npx cap add android
 
-      - name: مزامنة التطبيق
+      - name: Sync Android
         run: |
           npx cap sync android
 
-      - name: بناء APK
+      - name: Build Debug APK
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleDebug --stacktrace
 
-      - name: التأكد من APK
+      - name: Verify APK
         run: |
+          test -f android/app/build/outputs/apk/debug/app-debug.apk
           ls -lh android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: رفع APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Apply-APK
+          name: Wad-Faisal-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
