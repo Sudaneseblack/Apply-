@@ -1,952 +1,519 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    >
-
-    <meta name="theme-color" content="#020d1c">
-
-    <meta
-        name="description"
-        content="ود فيصل - تطبيق كرة القدم للمباريات والنتائج والبطولات"
-    >
-
-    <title>ود فيصل</title>
-
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#050b18">
+  <meta name="description" content="ود فيصل - كرة القدم... عشق لا ينتهي">
+  <title>ود فيصل | كرة القدم</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
-<!-- =====================================================
-     SPLASH SCREEN
-===================================================== -->
-
-<div id="splashScreen" class="splash-screen">
+  <!-- ==================== SPLASH ==================== -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-glow glow-one"></div>
+    <div class="splash-glow glow-two"></div>
 
     <div class="splash-content">
+      <div class="crown">♛</div>
 
-        <div class="splash-logo">
+      <div class="football-logo splash-logo">
+        <span>⚽</span>
+      </div>
 
-            <div class="crown">♛</div>
+      <h1>ود فيصل</h1>
+      <p>كرة القدم... عشق لا ينتهي</p>
 
-            <div class="football-ring">
+      <div class="loading-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-                <div class="football">⚽</div>
-
-            </div>
-
-            <div class="small-football">⚽</div>
-
-        </div>
-
-        <h1>ود فيصل</h1>
-
-        <p>كرة القدم... شغف لا ينتهي</p>
-
-        <div class="splash-loader">
-
-            <span></span>
-            <span></span>
-            <span></span>
-
-        </div>
-
-        <small>جاري تحميل التطبيق...</small>
-
+      <div class="loading-text" id="loadingText">جاري تحميل التطبيق...</div>
     </div>
 
-    <div class="splash-floor"></div>
+    <div class="stadium-floor">
+      <div class="field-line line-one"></div>
+      <div class="field-line line-two"></div>
+      <div class="field-circle"></div>
+    </div>
+  </div>
 
-</div>
+  <!-- ==================== APP ==================== -->
+  <div id="app" class="app hidden">
 
-
-<!-- =====================================================
-     MAIN APP
-===================================================== -->
-
-<div id="app" class="app hidden">
-
-    <!-- TOP HEADER -->
-
+    <!-- HEADER -->
     <header class="top-header">
-
-        <div class="brand-area">
-
-            <div class="brand-ball">
-                ⚽
-            </div>
-
-            <div class="brand-text">
-
-                <strong>ود فيصل</strong>
-
-                <small>
-                    كرة القدم أولاً
-                </small>
-
-            </div>
-
+      <div class="brand-mini">
+        <div class="mini-logo">⚽</div>
+        <div>
+          <strong>ود فيصل</strong>
+          <small>Football</small>
         </div>
+      </div>
 
-
-        <button
-            id="notificationButton"
-            class="icon-button"
-            aria-label="الإشعارات"
-        >
-
-            🔔
-
-            <span
-                id="notificationBadge"
-                class="notification-badge"
-            ></span>
-
+      <div class="header-actions">
+        <button class="icon-btn" id="notificationBtn" aria-label="الإشعارات">
+          <span>🔔</span>
+          <i id="notificationDot"></i>
         </button>
 
+        <button class="icon-btn" id="refreshBtn" aria-label="تحديث">
+          <span id="refreshIcon">↻</span>
+        </button>
+      </div>
     </header>
 
+    <!-- CONTENT -->
+    <main id="mainContent" class="main-content">
 
-    <!-- SEARCH -->
+      <!-- ==================== HOME ==================== -->
+      <section id="homePage" class="page active-page">
 
-    <section class="search-section">
-
-        <div class="search-box">
-
-            <span class="search-icon">
-                🔍
-            </span>
-
-            <input
-                id="searchInput"
-                type="search"
-                placeholder="ابحث عن فريق أو بطولة..."
-                autocomplete="off"
-            >
-
+        <div class="hero-card">
+          <div class="hero-bg-ball">⚽</div>
+          <div class="hero-content">
+            <span class="hero-small">مرحباً بك 👋</span>
+            <h1>كل مباريات كرة القدم<br><b>في مكان واحد</b></h1>
+            <p>تابع النتائج والمباريات والبطولات لحظة بلحظة.</p>
+          </div>
+          <div class="hero-line"></div>
         </div>
 
-        <div
-            id="searchResults"
-            class="search-results hidden"
-        ></div>
+        <!-- SEARCH -->
+        <div class="search-wrapper">
+          <span class="search-icon">⌕</span>
+          <input
+            id="globalSearch"
+            type="search"
+            autocomplete="off"
+            placeholder="ابحث عن فريق أو بطولة..."
+          >
+          <button id="clearSearch" class="clear-search hidden" type="button">×</button>
+          <div id="searchResults" class="search-results hidden"></div>
+        </div>
 
-    </section>
+        <!-- QUICK ACTIONS -->
+        <div class="section-title">
+          <h2>الوصول السريع</h2>
+        </div>
 
+        <div class="quick-grid">
+          <button class="quick-card" data-page="matchesPage">
+            <span class="quick-icon blue">⚽</span>
+            <strong>المباريات</strong>
+            <small>مباشرة والقادمة</small>
+          </button>
 
-    <!-- =================================================
-         HOME PAGE
-    ================================================== -->
+          <button class="quick-card" data-page="resultsPage">
+            <span class="quick-icon purple">▣</span>
+            <strong>النتائج</strong>
+            <small>آخر النتائج</small>
+          </button>
 
-    <main
-        id="homePage"
-        class="page active-page"
-    >
+          <button class="quick-card" data-page="leaguesPage">
+            <span class="quick-icon orange">🏆</span>
+            <strong>البطولات</strong>
+            <small>الدوريات والكؤوس</small>
+          </button>
 
-        <section class="hero-card">
-
-            <div>
-
-                <span class="hero-label">
-                    ⚡ مباريات كرة القدم
-                </span>
-
-                <h2>
-                    تابع المباراة لحظة بلحظة
-                </h2>
-
-                <p>
-                    النتائج، المباريات المباشرة،
-                    البطولات والإحصائيات.
-                </p>
-
-            </div>
-
-            <div class="hero-ball">
-                ⚽
-            </div>
-
-        </section>
-
+          <button class="quick-card" data-page="channelsPage">
+            <span class="quick-icon green">▣</span>
+            <strong>القنوات</strong>
+            <small>القنوات الرياضية</small>
+          </button>
+        </div>
 
         <!-- LIVE -->
+        <div class="section-title with-action">
+          <div>
+            <span class="section-kicker">LIVE NOW</span>
+            <h2>المباريات المباشرة</h2>
+          </div>
+          <button class="text-btn" data-page="matchesPage">عرض الكل</button>
+        </div>
 
-        <section class="content-section">
-
-            <div class="section-title">
-
-                <div>
-
-                    <span class="live-dot"></span>
-
-                    <h2>
-                        المباريات المباشرة
-                    </h2>
-
-                </div>
-
-                <button
-                    class="text-button"
-                    data-page="matchesPage"
-                >
-                    الكل
-                </button>
-
-            </div>
-
-            <div
-                id="homeLiveMatches"
-                class="matches-list"
-            ></div>
-
-        </section>
-
+        <div id="homeLiveMatches" class="matches-list">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
 
         <!-- TODAY -->
+        <div class="section-title with-action">
+          <div>
+            <span class="section-kicker">TODAY</span>
+            <h2>أهم مباريات اليوم</h2>
+          </div>
+          <button class="text-btn" data-page="matchesPage">المزيد</button>
+        </div>
 
-        <section class="content-section">
+        <div id="homeTodayMatches" class="matches-list">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
 
-            <div class="section-title">
+        <!-- NEWS -->
+        <div class="section-title">
+          <div>
+            <span class="section-kicker">NEWS</span>
+            <h2>آخر الأخبار</h2>
+          </div>
+        </div>
 
-                <h2>
-                    مباريات اليوم
-                </h2>
-
-                <button
-                    class="text-button"
-                    data-page="resultsPage"
-                >
-                    النتائج
-                </button>
-
+        <div class="news-grid">
+          <article class="news-card">
+            <div class="news-image">⚽</div>
+            <div class="news-body">
+              <span>كرة القدم</span>
+              <h3>تابع أهم المباريات والنتائج مع ود فيصل</h3>
+              <small>تحديث مستمر للبيانات</small>
             </div>
+          </article>
 
-            <div
-                id="homeTodayMatches"
-                class="matches-list"
-            ></div>
+          <article class="news-card">
+            <div class="news-image blue-news">🏆</div>
+            <div class="news-body">
+              <span>بطولات</span>
+              <h3>اكتشف البطولات والفرق المفضلة لديك</h3>
+              <small>كل شيء في مكان واحد</small>
+            </div>
+          </article>
+        </div>
+      </section>
 
-        </section>
+      <!-- ==================== MATCHES ==================== -->
+      <section id="matchesPage" class="page">
 
-    </main>
-
-
-    <!-- =================================================
-         MATCHES PAGE
-    ================================================== -->
-
-    <main
-        id="matchesPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">FOOTBALL</span>
             <h1>المباريات</h1>
-
-            <p>
-                جميع مباريات اليوم
-            </p>
-
+            <p>تابع المباريات المباشرة والقادمة والنتائج.</p>
+          </div>
+          <button id="matchesRefreshBtn" class="round-action">↻</button>
         </div>
 
-
-        <div class="filter-tabs">
-
-            <button
-                class="filter-tab active-filter"
-                data-filter="all"
-            >
-                الكل
-            </button>
-
-            <button
-                class="filter-tab"
-                data-filter="live"
-            >
-                مباشر
-            </button>
-
-            <button
-                class="filter-tab"
-                data-filter="upcoming"
-            >
-                قادمة
-            </button>
-
-            <button
-                class="filter-tab"
-                data-filter="finished"
-            >
-                انتهت
-            </button>
-
+        <div class="tabs" id="matchesTabs">
+          <button class="tab active" data-match-filter="all">الكل</button>
+          <button class="tab" data-match-filter="live">مباشر</button>
+          <button class="tab" data-match-filter="upcoming">القادمة</button>
+          <button class="tab" data-match-filter="finished">انتهت</button>
         </div>
 
+        <div id="matchesDateLabel" class="date-label"></div>
 
-        <div
-            id="matchesList"
-            class="matches-list"
-        ></div>
+        <div id="matchesList" class="matches-list large-list">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <p>جاري تحميل المباريات...</p>
+          </div>
+        </div>
+      </section>
 
-    </main>
+      <!-- ==================== RESULTS ==================== -->
+      <section id="resultsPage" class="page">
 
-
-    <!-- =================================================
-         RESULTS PAGE
-    ================================================== -->
-
-    <main
-        id="resultsPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">SCORES</span>
             <h1>النتائج</h1>
-
-            <p>
-                نتائج المباريات
-            </p>
-
+            <p>نتائج المباريات حسب التاريخ.</p>
+          </div>
         </div>
 
-
-        <div class="date-buttons">
-
-            <button
-                id="yesterdayButton"
-                class="date-button"
-            >
-                أمس
-            </button>
-
-            <button
-                id="todayButton"
-                class="date-button selected-date"
-            >
-                اليوم
-            </button>
-
-            <button
-                id="tomorrowButton"
-                class="date-button"
-            >
-                غداً
-            </button>
-
+        <div class="date-switcher">
+          <button class="date-btn" data-result-day="-1">أمس</button>
+          <button class="date-btn active" data-result-day="0">اليوم</button>
+          <button class="date-btn" data-result-day="1">غداً</button>
         </div>
 
+        <div id="resultsDateTitle" class="date-title"></div>
 
-        <div
-            id="matchesDateLabel"
-            class="date-label"
-        ></div>
+        <div id="resultsList" class="matches-list large-list">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <p>جاري تحميل النتائج...</p>
+          </div>
+        </div>
+      </section>
 
+      <!-- ==================== LEAGUES ==================== -->
+      <section id="leaguesPage" class="page">
 
-        <div
-            id="resultsList"
-            class="matches-list"
-        ></div>
-
-    </main>
-
-
-    <!-- =================================================
-         LEAGUES PAGE
-    ================================================== -->
-
-    <main
-        id="leaguesPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">COMPETITIONS</span>
             <h1>البطولات</h1>
-
-            <p>
-                أهم البطولات حول العالم
-            </p>
-
+            <p>أشهر البطولات والدوريات حول العالم.</p>
+          </div>
         </div>
 
-
-        <div
-            id="leaguesList"
-            class="leagues-grid"
-        ></div>
-
-    </main>
-
-
-    <!-- =================================================
-         LEAGUE DETAILS
-    ================================================== -->
-
-    <main
-        id="leagueDetailsPage"
-        class="page"
-    >
-
-        <div class="page-title league-detail-header">
-
-            <button
-                class="back-button"
-                data-page="leaguesPage"
-            >
-                ←
-            </button>
-
-            <div>
-
-                <h1 id="leagueDetailTitle">
-                    البطولة
-                </h1>
-
-                <p id="leagueDetailSubtitle">
-                    الترتيب
-                </p>
-
-            </div>
-
+        <div class="league-filter">
+          <button class="league-filter-btn active" data-league-type="all">الكل</button>
+          <button class="league-filter-btn" data-league-type="league">دوريات</button>
+          <button class="league-filter-btn" data-league-type="cup">كؤوس</button>
         </div>
 
-
-        <div class="league-tabs">
-
-            <button
-                class="league-tab active-league-tab"
-                data-league-tab="standings"
-            >
-                الترتيب
-            </button>
-
-            <button
-                class="league-tab"
-                data-league-tab="scorers"
-            >
-                الهدافون
-            </button>
-
+        <div id="leaguesList" class="leagues-grid">
+          <div class="loading-box">
+            <div class="spinner"></div>
+            <p>جاري تحميل البطولات...</p>
+          </div>
         </div>
+      </section>
 
+      <!-- ==================== CHANNELS ==================== -->
+      <section id="channelsPage" class="page">
 
-        <div
-            id="standingsContent"
-            class="league-content"
-        ></div>
-
-
-        <div
-            id="scorersContent"
-            class="league-content hidden"
-        ></div>
-
-    </main>
-
-
-    <!-- =================================================
-         CHANNELS PAGE
-    ================================================== -->
-
-    <main
-        id="channelsPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
-            <h1>القنوات</h1>
-
-            <p>
-                قنوات رياضية
-            </p>
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">TV</span>
+            <h1>القنوات الرياضية</h1>
+            <p>قائمة القنوات الرياضية المفضلة.</p>
+          </div>
         </div>
-
 
         <div class="channel-tabs">
-
-            <button
-                class="channel-tab active-channel"
-                data-channel="all"
-            >
-                الكل
-            </button>
-
-            <button
-                class="channel-tab"
-                data-channel="bein"
-            >
-                beIN
-            </button>
-
-            <button
-                class="channel-tab"
-                data-channel="ssc"
-            >
-                SSC
-            </button>
-
-            <button
-                class="channel-tab"
-                data-channel="favorite"
-            >
-                المفضلة
-            </button>
-
+          <button class="channel-tab active" data-channel-filter="all">الكل</button>
+          <button class="channel-tab" data-channel-filter="beIN">beIN</button>
+          <button class="channel-tab" data-channel-filter="SSC">SSC</button>
+          <button class="channel-tab" data-channel-filter="favorite">المفضلة</button>
         </div>
 
+        <div id="channelsList" class="channels-grid"></div>
+      </section>
 
-        <div
-            id="channelsList"
-            class="channels-list"
-        ></div>
+      <!-- ==================== MORE ==================== -->
+      <section id="morePage" class="page">
 
-    </main>
-
-
-    <!-- =================================================
-         FAVORITES PAGE
-    ================================================== -->
-
-    <main
-        id="favoritesPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
-            <h1>المفضلة</h1>
-
-            <p>
-                الفرق التي تتابعها
-            </p>
-
-        </div>
-
-
-        <div
-            id="favoritesList"
-            class="matches-list"
-        ></div>
-
-    </main>
-
-
-    <!-- =================================================
-         PROFILE PAGE
-    ================================================== -->
-
-    <main
-        id="profilePage"
-        class="page"
-    >
-
-        <div class="profile-card">
-
-            <div class="profile-avatar">
-                ⚽
-            </div>
-
+        <div class="profile-hero">
+          <div class="profile-avatar">⚽</div>
+          <div>
+            <span>مرحباً بك</span>
             <h1>ود فيصل</h1>
-
-            <p>
-                تطبيق كرة القدم
-            </p>
-
+            <p>مستخدم مميز ⭐</p>
+          </div>
         </div>
 
+        <div class="more-menu">
+          <button class="more-item" data-page="favoritesPage">
+            <span class="more-icon">♥</span>
+            <div>
+              <strong>المفضلة</strong>
+              <small>الفرق التي تتابعها</small>
+            </div>
+            <b>‹</b>
+          </button>
 
-        <div class="settings-menu">
+          <button class="more-item" data-page="settingsPage">
+            <span class="more-icon">⚙</span>
+            <div>
+              <strong>إعدادات التطبيق</strong>
+              <small>البيانات والإشعارات والمظهر</small>
+            </div>
+            <b>‹</b>
+          </button>
 
-            <button
-                class="menu-item"
-                data-action="notifications"
-            >
+          <button id="shareAppBtn" class="more-item">
+            <span class="more-icon">↗</span>
+            <div>
+              <strong>مشاركة التطبيق</strong>
+              <small>شارك ود فيصل مع أصدقائك</small>
+            </div>
+            <b>‹</b>
+          </button>
 
-                <span>🔔</span>
+          <button id="contactBtn" class="more-item">
+            <span class="more-icon">✉</span>
+            <div>
+              <strong>تواصل معنا</strong>
+              <small>راسل فريق ود فيصل</small>
+            </div>
+            <b>‹</b>
+          </button>
 
-                <div>
+          <button id="ideaBtn" class="more-item">
+            <span class="more-icon">💡</span>
+            <div>
+              <strong>إرسال فكرة للمطور</strong>
+              <small>ساعدنا في تطوير التطبيق</small>
+            </div>
+            <b>‹</b>
+          </button>
+        </div>
+      </section>
 
-                    <b>الإشعارات</b>
+      <!-- ==================== FAVORITES ==================== -->
+      <section id="favoritesPage" class="page">
 
-                    <small>
-                        التحكم في الإشعارات
-                    </small>
-
-                </div>
-
-                <span>›</span>
-
-            </button>
-
-
-            <button
-                class="menu-item"
-                data-action="share"
-            >
-
-                <span>📤</span>
-
-                <div>
-
-                    <b>مشاركة التطبيق</b>
-
-                    <small>
-                        شارك التطبيق مع أصدقائك
-                    </small>
-
-                </div>
-
-                <span>›</span>
-
-            </button>
-
-
-            <button
-                class="menu-item"
-                data-action="contact"
-            >
-
-                <span>✉️</span>
-
-                <div>
-
-                    <b>تواصل معنا</b>
-
-                    <small>
-                        أرسل لنا رسالة
-                    </small>
-
-                </div>
-
-                <span>›</span>
-
-            </button>
-
-
-            <button
-                id="developerButton"
-                class="menu-item"
-            >
-
-                <span>👨‍💻</span>
-
-                <div>
-
-                    <b>المطور</b>
-
-                    <small>
-                        ود فيصل
-                    </small>
-
-                </div>
-
-                <span>›</span>
-
-            </button>
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">MY TEAMS</span>
+            <h1>المفضلة</h1>
+            <p>فرقك المفضلة محفوظة على جهازك.</p>
+          </div>
         </div>
 
+        <div id="favoritesList" class="favorites-list"></div>
+      </section>
 
-        <button
-            class="primary-button"
-            data-page="settingsPage"
-        >
-            ⚙️ الإعدادات
-        </button>
+      <!-- ==================== SETTINGS ==================== -->
+      <section id="settingsPage" class="page">
 
-    </main>
-
-
-    <!-- =================================================
-         SETTINGS PAGE
-    ================================================== -->
-
-    <main
-        id="settingsPage"
-        class="page"
-    >
-
-        <div class="page-title">
-
+        <div class="page-heading">
+          <div>
+            <span class="section-kicker">SETTINGS</span>
             <h1>الإعدادات</h1>
-
-            <p>
-                تخصيص التطبيق
-            </p>
-
+            <p>تحكم في تجربة ود فيصل.</p>
+          </div>
         </div>
 
+        <div class="settings-group">
+          <h3>جودة البيانات</h3>
 
-        <section class="settings-card">
-
-            <h3>جودة البيانات</h3>
-
-            <label class="radio-item">
-
-                <input
-                    type="radio"
-                    name="quality"
-                    value="best"
-                    checked
-                >
-
-                <span>
-                    أفضل جودة
-                </span>
-
-            </label>
-
-
-            <label class="radio-item">
-
-                <input
-                    type="radio"
-                    name="quality"
-                    value="balanced"
-                >
-
-                <span>
-                    متوازنة
-                </span>
-
-            </label>
-
-
-            <label class="radio-item">
-
-                <input
-                    type="radio"
-                    name="quality"
-                    value="low"
-                >
-
-                <span>
-                    توفير البيانات
-                </span>
-
-            </label>
-
-        </section>
-
-
-        <section class="settings-card">
-
-            <div class="setting-row">
-
-                <div>
-
-                    <b>
-                        استخدام الشبكة
-                    </b>
-
-                    <small>
-                        السماح بتحميل بيانات المباريات
-                    </small>
-
-                </div>
-
-                <label class="switch">
-
-                    <input
-                        id="networkToggle"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <span></span>
-
-                </label>
-
+          <button class="quality-option" data-quality="best">
+            <span class="setting-radio"></span>
+            <div>
+              <strong>أفضل جودة</strong>
+              <small>بيانات أكثر وتحديثات أفضل</small>
             </div>
+          </button>
 
-
-            <div class="setting-row">
-
-                <div>
-
-                    <b>
-                        الإشعارات
-                    </b>
-
-                    <small>
-                        تنبيهات التطبيق
-                    </small>
-
-                </div>
-
-                <label class="switch">
-
-                    <input
-                        id="notificationToggle"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <span></span>
-
-                </label>
-
+          <button class="quality-option" data-quality="balanced">
+            <span class="setting-radio"></span>
+            <div>
+              <strong>جودة متوازنة</strong>
+              <small>اختيار مناسب لمعظم المستخدمين</small>
             </div>
+          </button>
 
-
-            <div class="setting-row">
-
-                <div>
-
-                    <b>
-                        الوضع الداكن
-                    </b>
-
-                    <small>
-                        مظهر التطبيق
-                    </small>
-
-                </div>
-
-                <label class="switch">
-
-                    <input
-                        id="darkModeToggle"
-                        type="checkbox"
-                        checked
-                    >
-
-                    <span></span>
-
-                </label>
-
+          <button class="quality-option" data-quality="data">
+            <span class="setting-radio"></span>
+            <div>
+              <strong>توفير البيانات</strong>
+              <small>تقليل طلبات التحديث</small>
             </div>
+          </button>
+        </div>
 
-        </section>
+        <div class="settings-group">
+          <h3>إعدادات التطبيق</h3>
 
+          <label class="setting-row">
+            <div>
+              <strong>تحديث البيانات تلقائياً</strong>
+              <small>تحديث المباريات المباشرة تلقائياً</small>
+            </div>
+            <input id="autoRefreshToggle" class="toggle-input" type="checkbox">
+            <span class="toggle"></span>
+          </label>
+
+          <label class="setting-row">
+            <div>
+              <strong>الإشعارات</strong>
+              <small>إظهار حالة الإشعارات</small>
+            </div>
+            <input id="notificationsToggle" class="toggle-input" type="checkbox">
+            <span class="toggle"></span>
+          </label>
+
+          <label class="setting-row">
+            <div>
+              <strong>الوضع الليلي</strong>
+              <small>التصميم الداكن مفعّل</small>
+            </div>
+            <input id="darkModeToggle" class="toggle-input" type="checkbox" checked>
+            <span class="toggle"></span>
+          </label>
+        </div>
+
+        <div class="settings-info">
+          <span>ℹ</span>
+          <p>الإعدادات محفوظة تلقائياً على جهازك باستخدام LocalStorage.</p>
+        </div>
+      </section>
     </main>
 
-
-    <!-- =================================================
-         BOTTOM NAVIGATION
-    ================================================== -->
-
+    <!-- ==================== BOTTOM NAV ==================== -->
     <nav class="bottom-nav">
+      <button class="nav-item active" data-page="homePage">
+        <span>⌂</span>
+        <small>الرئيسية</small>
+      </button>
 
-        <button
-            class="nav-item active-nav"
-            data-page="homePage"
-        >
+      <button class="nav-item" data-page="matchesPage">
+        <span>⚽</span>
+        <small>المباريات</small>
+      </button>
 
-            <span>⌂</span>
-            <small>الرئيسية</small>
+      <button class="nav-item" data-page="leaguesPage">
+        <span>🏆</span>
+        <small>البطولات</small>
+      </button>
 
-        </button>
+      <button class="nav-item" data-page="channelsPage">
+        <span>▣</span>
+        <small>القنوات</small>
+      </button>
 
-
-        <button
-            class="nav-item"
-            data-page="matchesPage"
-        >
-
-            <span>⚽</span>
-            <small>المباريات</small>
-
-        </button>
-
-
-        <button
-            class="nav-item"
-            data-page="leaguesPage"
-        >
-
-            <span>🏆</span>
-            <small>البطولات</small>
-
-        </button>
-
-
-        <button
-            class="nav-item"
-            data-page="channelsPage"
-        >
-
-            <span>📺</span>
-            <small>القنوات</small>
-
-        </button>
-
-
-        <button
-            class="nav-item"
-            data-page="profilePage"
-        >
-
-            <span>☰</span>
-            <small>المزيد</small>
-
-        </button>
-
+      <button class="nav-item" data-page="morePage">
+        <span>☰</span>
+        <small>المزيد</small>
+      </button>
     </nav>
+  </div>
 
-</div>
+  <!-- ==================== MATCH MODAL ==================== -->
+  <div id="matchModal" class="modal hidden">
+    <div class="modal-backdrop" data-close-modal></div>
 
+    <div class="modal-panel">
+      <div class="modal-header">
+        <button class="modal-close" data-close-modal>×</button>
+        <span>تفاصيل المباراة</span>
+        <button id="modalFavoriteBtn" class="modal-favorite">♡</button>
+      </div>
 
-<!-- =====================================================
-     MATCH MODAL
-===================================================== -->
-
-<div
-    id="matchModal"
-    class="modal hidden"
->
-
-    <div class="modal-backdrop"></div>
-
-    <div class="modal-box">
-
-        <div class="modal-header">
-
-            <h2>
-                تفاصيل المباراة
-            </h2>
-
-            <button
-                id="closeModal"
-                class="close-modal"
-            >
-                ×
-            </button>
-
+      <div id="matchDetails" class="match-details">
+        <div class="loading-box">
+          <div class="spinner"></div>
+          <p>جاري تحميل التفاصيل...</p>
         </div>
+      </div>
 
+      <div class="detail-tabs">
+        <button class="detail-tab active" data-detail-tab="events">الأحداث</button>
+        <button class="detail-tab" data-detail-tab="lineups">التشكيلة</button>
+        <button class="detail-tab" data-detail-tab="stats">الإحصائيات</button>
+      </div>
 
-        <div id="matchDetails"></div>
-
+      <div id="detailTabContent" class="detail-tab-content"></div>
     </div>
+  </div>
 
-</div>
+  <!-- ==================== LEAGUE MODAL ==================== -->
+  <div id="leagueModal" class="modal hidden">
+    <div class="modal-backdrop" data-close-league></div>
 
+    <div class="modal-panel">
+      <div class="modal-header">
+        <button class="modal-close" data-close-league>×</button>
+        <span>تفاصيل البطولة</span>
+        <span></span>
+      </div>
 
-<!-- =====================================================
-     TOAST
-===================================================== -->
+      <div id="leagueDetails" class="league-details"></div>
+    </div>
+  </div>
 
-<div
-    id="toast"
-    class="toast"
-></div>
+  <!-- ==================== TOAST ==================== -->
+  <div id="toast" class="toast">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">تم بنجاح</span>
+  </div>
 
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
-
-<script src="app.js" defer></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
