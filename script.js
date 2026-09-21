@@ -1,12 +1,12 @@
-/* =========================================================
+/* ==================================================
    ود فيصل
-   Telegram + Football API
-========================================================= */
+   التطبيق الرئيسي
+================================================== */
 
 
-/* =========================================================
-   الروابط الأساسية
-========================================================= */
+/* =========================
+   روابط التطبيق
+========================= */
 
 const CHANNEL_URL =
   "https://t.me/alrufaaey1";
@@ -18,40 +18,32 @@ const DEVELOPER_USERNAME =
   "@mohmmedfysal";
 
 
-/* =========================================================
-   API-Football
-========================================================= */
+/* =========================
+   API FOOTBALL
+========================= */
 
-const FOOTBALL_API_KEY =
-  "7c34938958fccb0a48fe5f67e493d9ec";
+/*
+  ضع مفتاح API-Football هنا.
 
-const FOOTBALL_API_BASE =
+  مثال:
+
+  const API_KEY = "ضع_المفتاح_هنا";
+
+  لا تنشر المفتاح الحقيقي في GitHub
+  إذا كان المستودع عاماً.
+*/
+
+const API_KEY =
+  "ضع_مفتاح_API_FOOTBALL_هنا";
+
+
+const FOOTBALL_API =
   "https://v3.football.api-sports.io";
 
-const FOOTBALL_TIMEZONE =
-  "Africa/Khartoum";
 
-
-/*
-  التحديث التلقائي كل 15 دقيقة.
-  السبب:
-  الخطة المجانية محدودة بعدد طلبات يومي،
-  لذلك لا نستهلكها بسرعة.
-*/
-const FOOTBALL_REFRESH_MS =
-  15 * 60 * 1000;
-
-
-/*
-  أقل مدة بين طلبين يدويين.
-*/
-const FOOTBALL_MIN_REQUEST_GAP =
-  60 * 1000;
-
-
-/* =========================================================
-   عناصر الصفحات
-========================================================= */
+/* =========================
+   العناصر
+========================= */
 
 const welcomeScreen =
   document.getElementById("welcomeScreen");
@@ -65,10 +57,6 @@ const messageScreen =
 const footballScreen =
   document.getElementById("footballScreen");
 
-
-/* =========================================================
-   أزرار الصفحة الرئيسية
-========================================================= */
 
 const enterBtn =
   document.getElementById("enterBtn");
@@ -88,16 +76,16 @@ const footballBtn =
 const aboutBtn =
   document.getElementById("aboutBtn");
 
+
 const backHomeBtn =
   document.getElementById("backHomeBtn");
 
-const backFootballHomeBtn =
-  document.getElementById("backFootballHomeBtn");
+const backFootballBtn =
+  document.getElementById("backFootballBtn");
 
+const refreshFootballBtn =
+  document.getElementById("refreshFootballBtn");
 
-/* =========================================================
-   المطور
-========================================================= */
 
 const developerModal =
   document.getElementById("developerModal");
@@ -105,16 +93,13 @@ const developerModal =
 const aboutModal =
   document.getElementById("aboutModal");
 
+
 const openDeveloperBtn =
   document.getElementById("openDeveloperBtn");
 
 const copyDeveloperBtn =
   document.getElementById("copyDeveloperBtn");
 
-
-/* =========================================================
-   الرسالة
-========================================================= */
 
 const messageInput =
   document.getElementById("messageInput");
@@ -126,424 +111,117 @@ const sendMessageBtn =
   document.getElementById("sendMessageBtn");
 
 
-/* =========================================================
-   Toast
-========================================================= */
-
 const toast =
   document.getElementById("toast");
 
-let toastTimer =
-  null;
+
+const footballList =
+  document.getElementById("footballList");
+
+const footballLoading =
+  document.getElementById("footballLoading");
+
+const footballEmpty =
+  document.getElementById("footballEmpty");
+
+const footballUpdated =
+  document.getElementById("footballUpdated");
 
 
-/* =========================================================
-   عناصر كرة القدم
-========================================================= */
+/* =========================
+   متغيرات الكرة
+========================= */
 
-const footballDateText =
-  document.getElementById("footballDateText");
+let footballTimer = null;
 
-const liveCount =
-  document.getElementById("liveCount");
-
-const todayCount =
-  document.getElementById("todayCount");
-
-const upcomingCount =
-  document.getElementById("upcomingCount");
-
-const footballApiStatus =
-  document.getElementById("footballApiStatus");
-
-const footballLastUpdate =
-  document.getElementById("footballLastUpdate");
-
-const footballRefreshBtn =
-  document.getElementById("footballRefreshBtn");
-
-const footballNotifyBtn =
-  document.getElementById("footballNotifyBtn");
-
-const footballMatches =
-  document.getElementById("footballMatches");
-
-const footballCompetitions =
-  document.getElementById("footballCompetitions");
-
-const footballTabs =
-  document.querySelectorAll(
-    "[data-football-tab]"
-  );
-
-
-/* =========================================================
-   حالة كرة القدم
-========================================================= */
-
-let footballMode =
+let currentFootballTab =
   "live";
 
-let footballToday =
-  [];
-
-let footballTomorrow =
-  [];
-
-let footballLastFetchTime =
-  0;
-
-let footballRefreshTimer =
-  null;
-
-let footballRequestRunning =
-  false;
-
-let previousLiveSnapshot =
-  "";
-
-let notificationEnabled =
-  false;
+let footballData = {
+  live: [],
+  today: [],
+  upcoming: []
+};
 
 
-/* =========================================================
-   الحالات
-========================================================= */
+/* =========================
+   Toast
+========================= */
 
-const LIVE_STATUSES =
-  new Set([
-    "1H",
-    "HT",
-    "2H",
-    "ET",
-    "BT",
-    "P",
-    "INT"
-  ]);
+let toastTimer = null;
 
-const FINISHED_STATUSES =
-  new Set([
-    "FT",
-    "AET",
-    "PEN"
-  ]);
+function showToast(message) {
 
+  clearTimeout(toastTimer);
 
-/* =========================================================
-   التاريخ
-========================================================= */
+  toast.textContent =
+    message;
 
-function getDateInTimeZone(
-  timeZone = FOOTBALL_TIMEZONE,
-  offsetDays = 0
-) {
-  const now =
-    new Date();
+  toast.classList.add("show");
 
-  now.setDate(
-    now.getDate() + offsetDays
-  );
+  toastTimer =
+    setTimeout(() => {
 
-  const parts =
-    new Intl.DateTimeFormat(
-      "en",
-      {
-        timeZone,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-      }
-    ).formatToParts(now);
+      toast.classList.remove("show");
 
-  const map = {};
-
-  parts.forEach(part => {
-    if (part.type !== "literal") {
-      map[part.type] =
-        part.value;
-    }
-  });
-
-  return (
-    map.year +
-    "-" +
-    map.month +
-    "-" +
-    map.day
-  );
+    }, 2300);
 }
 
 
-function formatArabicDate(
-  dateKey
-) {
-  try {
+/* =========================
+   فتح Telegram
+========================= */
 
-    const date =
-      new Date(
-        dateKey + "T12:00:00"
-      );
+function openTelegram(url) {
 
-    return new Intl.DateTimeFormat(
-      "ar-SD",
-      {
-        timeZone:
-          FOOTBALL_TIMEZONE,
-
-        weekday: "long",
-
-        day: "numeric",
-
-        month: "long",
-
-        year: "numeric"
-      }
-    ).format(date);
-
-  } catch {
-
-    return dateKey;
-
-  }
+  window.location.href =
+    url;
 }
 
 
-function formatKickoff(
-  isoDate
-) {
-  try {
+/* =========================
+   تبديل الصفحات
+========================= */
 
-    return new Intl.DateTimeFormat(
-      "ar-SD",
-      {
-        timeZone:
-          FOOTBALL_TIMEZONE,
+function showScreen(screen) {
 
-        hour: "2-digit",
+  const screens = [
 
-        minute: "2-digit"
-      }
-    ).format(
-      new Date(isoDate)
-    );
-
-  } catch {
-
-    return "--:--";
-
-  }
-}
-
-
-/* =========================================================
-   LocalStorage آمن
-========================================================= */
-
-function storageSet(
-  key,
-  value
-) {
-  try {
-
-    localStorage.setItem(
-      key,
-      JSON.stringify(value)
-    );
-
-  } catch {
-
-    // بعض البيئات قد تمنع التخزين.
-  }
-}
-
-
-function storageGet(
-  key,
-  fallback = null
-) {
-  try {
-
-    const value =
-      localStorage.getItem(key);
-
-    if (!value) {
-      return fallback;
-    }
-
-    return JSON.parse(value);
-
-  } catch {
-
-    return fallback;
-
-  }
-}
-
-
-/* =========================================================
-   التنبيهات داخل التطبيق
-========================================================= */
-
-notificationEnabled =
-  storageGet(
-    "wad_faisal_football_notifications",
-    false
-  ) === true;
-
-updateNotificationButton();
-
-
-function updateNotificationButton() {
-
-  if (!footballNotifyBtn) {
-    return;
-  }
-
-  footballNotifyBtn.classList.toggle(
-    "active",
-    notificationEnabled
-  );
-
-  footballNotifyBtn.textContent =
-    notificationEnabled
-      ? "🔔"
-      : "🔕";
-
-  footballNotifyBtn.title =
-    notificationEnabled
-      ? "تنبيهات المباريات مفعلة"
-      : "تنبيهات المباريات غير مفعلة";
-}
-
-
-/* =========================================================
-   عرض الشاشة
-========================================================= */
-
-function showScreen(
-  screen
-) {
-
-  [
     welcomeScreen,
     homeScreen,
     messageScreen,
     footballScreen
-  ].forEach(item => {
+
+  ];
+
+  screens.forEach(item => {
 
     if (item) {
+
       item.classList.remove(
         "active"
       );
+
     }
 
   });
 
 
-  if (screen) {
-    screen.classList.add(
-      "active"
-    );
-  }
+  screen.classList.add(
+    "active"
+  );
 
 
   window.scrollTo({
     top: 0,
     behavior: "smooth"
   });
-
-
-  updateFootballTimer();
 }
 
 
-/* =========================================================
-   Telegram
-========================================================= */
-
-function openTelegram(
-  url
-) {
-  window.location.href =
-    url;
-}
-
-
-/* =========================================================
-   Toast
-========================================================= */
-
-function showToast(
-  message
-) {
-
-  clearTimeout(
-    toastTimer
-  );
-
-  toast.textContent =
-    message;
-
-  toast.classList.add(
-    "show"
-  );
-
-  toastTimer =
-    setTimeout(() => {
-
-      toast.classList.remove(
-        "show"
-      );
-
-    }, 2800);
-}
-
-
-/* =========================================================
-   Modal
-========================================================= */
-
-function openModal(
-  modal
-) {
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.add(
-    "open"
-  );
-
-  modal.setAttribute(
-    "aria-hidden",
-    "false"
-  );
-}
-
-
-function closeModal(
-  modal
-) {
-
-  if (!modal) {
-    return;
-  }
-
-  modal.classList.remove(
-    "open"
-  );
-
-  modal.setAttribute(
-    "aria-hidden",
-    "true"
-  );
-}
-
-
-/* =========================================================
-   الصفحة الرئيسية
-========================================================= */
+/* =========================
+   شاشة الدخول
+========================= */
 
 enterBtn.addEventListener(
   "click",
@@ -557,6 +235,10 @@ enterBtn.addEventListener(
 );
 
 
+/* =========================
+   القناة
+========================= */
+
 channelBtn.addEventListener(
   "click",
   () => {
@@ -569,6 +251,10 @@ channelBtn.addEventListener(
 );
 
 
+/* =========================
+   المطور
+========================= */
+
 developerBtn.addEventListener(
   "click",
   () => {
@@ -580,6 +266,10 @@ developerBtn.addEventListener(
   }
 );
 
+
+/* =========================
+   الرسالة
+========================= */
 
 messageBtn.addEventListener(
   "click",
@@ -599,6 +289,10 @@ messageBtn.addEventListener(
 );
 
 
+/* =========================
+   العودة
+========================= */
+
 backHomeBtn.addEventListener(
   "click",
   () => {
@@ -610,6 +304,42 @@ backHomeBtn.addEventListener(
   }
 );
 
+
+/* =========================
+   كرة القدم
+========================= */
+
+footballBtn.addEventListener(
+  "click",
+  () => {
+
+    showScreen(
+      footballScreen
+    );
+
+    loadFootball();
+
+  }
+);
+
+
+backFootballBtn.addEventListener(
+  "click",
+  () => {
+
+    stopFootballAutoRefresh();
+
+    showScreen(
+      homeScreen
+    );
+
+  }
+);
+
+
+/* =========================
+   About
+========================= */
 
 aboutBtn.addEventListener(
   "click",
@@ -623,12 +353,40 @@ aboutBtn.addEventListener(
 );
 
 
-/* =========================================================
-   المودالات
-========================================================= */
+/* =========================
+   Modal
+========================= */
+
+function openModal(modal) {
+
+  modal.classList.add(
+    "open"
+  );
+
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+}
+
+
+function closeModal(modal) {
+
+  modal.classList.remove(
+    "open"
+  );
+
+  modal.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+}
+
 
 document
-  .querySelectorAll("[data-close]")
+  .querySelectorAll(
+    "[data-close]"
+  )
   .forEach(button => {
 
     button.addEventListener(
@@ -641,9 +399,11 @@ document
           );
 
         if (modal) {
+
           closeModal(
             modal
           );
+
         }
 
       }
@@ -653,7 +413,9 @@ document
 
 
 document
-  .querySelectorAll(".modal-backdrop")
+  .querySelectorAll(
+    ".modal-backdrop"
+  )
   .forEach(backdrop => {
 
     backdrop.addEventListener(
@@ -666,9 +428,11 @@ document
           );
 
         if (modal) {
+
           closeModal(
             modal
           );
+
         }
 
       }
@@ -677,9 +441,9 @@ document
   });
 
 
-/* =========================================================
-   المطور
-========================================================= */
+/* =========================
+   حساب المطور
+========================= */
 
 openDeveloperBtn.addEventListener(
   "click",
@@ -693,17 +457,19 @@ openDeveloperBtn.addEventListener(
 );
 
 
+/* =========================
+   نسخ المعرف
+========================= */
+
 copyDeveloperBtn.addEventListener(
   "click",
   async () => {
 
     try {
 
-      await navigator
-        .clipboard
-        .writeText(
-          DEVELOPER_USERNAME
-        );
+      await navigator.clipboard.writeText(
+        DEVELOPER_USERNAME
+      );
 
       showToast(
         "تم نسخ معرف المطور"
@@ -712,7 +478,6 @@ copyDeveloperBtn.addEventListener(
     } catch {
 
       showToast(
-        "معرف المطور: " +
         DEVELOPER_USERNAME
       );
 
@@ -722,9 +487,9 @@ copyDeveloperBtn.addEventListener(
 );
 
 
-/* =========================================================
+/* =========================
    الرسالة
-========================================================= */
+========================= */
 
 messageInput.addEventListener(
   "input",
@@ -754,1856 +519,380 @@ sendMessageBtn.addEventListener(
       messageInput.focus();
 
       return;
+
     }
 
 
     const finalMessage =
-      "السلام عليكم محمد فيصل\n\n" +
-      message +
-      "\n\n— من تطبيق ود فيصل";
+
+      `السلام عليكم محمد فيصل
+
+${message}
+
+— من تطبيق ود فيصل`;
 
 
     openTelegram(
-      DEVELOPER_URL +
-      "?text=" +
-      encodeURIComponent(
-        finalMessage
-      )
+      `${DEVELOPER_URL}?text=${
+        encodeURIComponent(
+          finalMessage
+        )
+      }`
     );
 
   }
 );
 
 
-/* =========================================================
-   Football API
-========================================================= */
+/* ==================================================
+   كرة القدم
+================================================== */
 
-async function footballApiGet(
-  params = {}
-) {
 
-  const url =
-    new URL(
-      FOOTBALL_API_BASE +
-      "/fixtures"
+/* =========================
+   التاريخ الحالي
+========================= */
+
+function getTodayDate() {
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    String(
+      now.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
     );
 
+  const day =
+    String(
+      now.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
 
-  Object.entries(
-    params
-  ).forEach(
-    ([key, value]) => {
+  return `${year}-${month}-${day}`;
+}
 
-      if (
-        value !== undefined &&
-        value !== null &&
-        value !== ""
-      ) {
 
-        url.searchParams.set(
-          key,
-          value
-        );
+/* =========================
+   طلب API
+========================= */
 
-      }
+async function footballRequest(
+  endpoint
+) {
 
-    }
-  );
+  if (
+    !API_KEY ||
+    API_KEY.includes(
+      "ضع_مفتاح"
+    )
+  ) {
+
+    throw new Error(
+      "API_KEY_MISSING"
+    );
+
+  }
 
 
   const response =
     await fetch(
-      url.toString(),
+      `${FOOTBALL_API}${endpoint}`,
       {
+
         method: "GET",
 
         headers: {
+
           "x-apisports-key":
-            FOOTBALL_API_KEY,
+            API_KEY,
 
           "Accept":
             "application/json"
-        },
 
-        cache: "no-store"
+        }
+
       }
     );
-
-
-  let data = null;
-
-  try {
-
-    data =
-      await response.json();
-
-  } catch {
-
-    throw new Error(
-      "تعذر قراءة رد الخدمة."
-    );
-
-  }
 
 
   if (!response.ok) {
 
     throw new Error(
-      "الخدمة أعادت خطأ HTTP " +
-      response.status
+      `HTTP_${response.status}`
     );
 
   }
 
 
+  const data =
+    await response.json();
+
+
   if (
-    data &&
     data.errors &&
     Object.keys(
       data.errors
     ).length > 0
   ) {
 
-    const errorValues =
-      Object.values(
-        data.errors
-      );
-
     throw new Error(
-      errorValues.join(" • ")
+      "API_ERROR"
     );
 
   }
 
 
-  return data;
+  return data.response || [];
 }
 
 
-/* =========================================================
-   تحميل مباريات يوم
-========================================================= */
+/* =========================
+   تحميل كرة القدم
+========================= */
 
-async function fetchFixturesForDate(
-  dateKey,
-  force = false
-) {
+async function loadFootball() {
 
-  const storageKey =
-    "wad_faisal_fixtures_" +
-    dateKey;
-
-  const cached =
-    storageGet(
-      storageKey,
-      null
-    );
-
-
-  /*
-    نظهر الكاش بسرعة.
-  */
-  if (
-    cached &&
-    Array.isArray(
-      cached.response
-    )
-  ) {
-
-    if (
-      dateKey ===
-      getDateInTimeZone()
-    ) {
-
-      footballToday =
-        cached.response;
-
-    } else {
-
-      footballTomorrow =
-        cached.response;
-
-    }
-
-  }
-
-
-  const now =
-    Date.now();
-
-
-  /*
-    منع الطلبات المتكررة.
-  */
-  if (
-    !force &&
-    footballLastFetchTime > 0 &&
-    now - footballLastFetchTime <
-      FOOTBALL_MIN_REQUEST_GAP &&
-    dateKey ===
-      getDateInTimeZone()
-  ) {
-
-    return cached
-      ? cached.response
-      : [];
-
-  }
-
-
-  const data =
-    await footballApiGet({
-      date: dateKey,
-
-      timezone:
-        FOOTBALL_TIMEZONE
-    });
-
-
-  const response =
-    Array.isArray(
-      data.response
-    )
-      ? data.response
-      : [];
-
-
-  storageSet(
-    storageKey,
-    {
-      savedAt: now,
-      response
-    }
+  footballLoading.classList.remove(
+    "hidden"
   );
 
-
-  if (
-    dateKey ===
-    getDateInTimeZone()
-  ) {
-
-    footballToday =
-      response;
-
-    footballLastFetchTime =
-      now;
-
-  } else {
-
-    footballTomorrow =
-      response;
-
-  }
-
-
-  return response;
-}
-
-
-/* =========================================================
-   تحميل اليوم
-========================================================= */
-
-async function loadToday(
-  force = false
-) {
-
-  return fetchFixturesForDate(
-    getDateInTimeZone(),
-    force
+  footballEmpty.classList.add(
+    "hidden"
   );
 
-}
-
-
-/* =========================================================
-   تحميل الغد
-========================================================= */
-
-async function loadTomorrow(
-  force = false
-) {
-
-  return fetchFixturesForDate(
-    getDateInTimeZone(
-      FOOTBALL_TIMEZONE,
-      1
-    ),
-    force
-  );
-
-}
-
-
-/* =========================================================
-   تحديد المباراة الحية
-========================================================= */
-
-function isLiveMatch(
-  match
-) {
-
-  const status =
-    match &&
-    match.fixture &&
-    match.fixture.status;
-
-  if (!status) {
-    return false;
-  }
-
-  return LIVE_STATUSES.has(
-    status.short
-  );
-
-}
-
-
-/* =========================================================
-   الوقت القادم
-========================================================= */
-
-function isUpcomingMatch(
-  match
-) {
-
-  if (
-    !match ||
-    !match.fixture
-  ) {
-    return false;
-  }
-
-
-  const timestamp =
-    match.fixture.timestamp;
-
-
-  if (
-    typeof timestamp !==
-    "number"
-  ) {
-    return false;
-  }
-
-
-  return (
-    timestamp * 1000 >
-    Date.now()
-  );
-
-}
-
-
-/* =========================================================
-   تحويل حالة المباراة للعربي
-========================================================= */
-
-function getStatusText(
-  match
-) {
-
-  const status =
-    match &&
-    match.fixture &&
-    match.fixture.status;
-
-
-  if (!status) {
-    return "غير معروف";
-  }
-
-
-  const code =
-    status.short;
-
-
-  const names = {
-
-    NS: "لم تبدأ",
-
-    TBD: "لم تحدد",
-
-    "1H": "الشوط الأول",
-
-    HT: "استراحة",
-
-    "2H": "الشوط الثاني",
-
-    ET: "وقت إضافي",
-
-    BT: "استراحة إضافية",
-
-    P: "ركلات ترجيح",
-
-    INT: "متوقفة",
-
-    FT: "انتهت",
-
-    AET: "انتهت بعد التمديد",
-
-    PEN: "انتهت بركلات الترجيح",
-
-    PST: "مؤجلة",
-
-    CANC: "ملغاة",
-
-    ABD: "متوقفة",
-
-    AWD: "فوز إداري",
-
-    WO: "انسحاب",
-
-    SUSP: "موقوفة"
-
-  };
-
-
-  return (
-    names[code] ||
-    status.long ||
-    code
-  );
-
-}
-
-
-/* =========================================================
-   الدقيقة الحالية
-========================================================= */
-
-function getElapsedText(
-  match
-) {
-
-  const status =
-    match &&
-    match.fixture &&
-    match.fixture.status;
-
-
-  if (
-    !status
-  ) {
-    return "";
-  }
-
-
-  if (
-    !LIVE_STATUSES.has(
-      status.short
-    )
-  ) {
-
-    return getStatusText(
-      match
-    );
-
-  }
-
-
-  if (
-    typeof status.elapsed ===
-    "number"
-  ) {
-
-    if (
-      typeof status.extra ===
-      "number"
-    ) {
-
-      return (
-        status.elapsed +
-        "+" +
-        status.extra +
-        "'"
-      );
-
-    }
-
-    return (
-      status.elapsed +
-      "'"
-    );
-
-  }
-
-
-  return getStatusText(
-    match
-  );
-
-}
-
-
-/* =========================================================
-   تنسيق النتيجة
-========================================================= */
-
-function getScore(
-  match
-) {
-
-  const goals =
-    match.goals || {};
-
-
-  const home =
-    goals.home ??
-    0;
-
-  const away =
-    goals.away ??
-    0;
-
-
-  return {
-    home,
-    away
-  };
-
-}
-
-
-/* =========================================================
-   HTML escaping
-========================================================= */
-
-function escapeHtml(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   رابط صورة آمن
-========================================================= */
-
-function safeImageUrl(
-  url
-) {
-
-  if (
-    typeof url !== "string"
-  ) {
-    return "";
-  }
-
-  if (
-    !url.startsWith(
-      "https://"
-    )
-  ) {
-    return "";
-  }
-
-  return escapeHtml(
-    url
-  );
-
-}
-
-
-/* =========================================================
-   بطاقة مباراة
-========================================================= */
-
-function createMatchCard(
-  match,
-  index
-) {
-
-  const fixture =
-    match.fixture || {};
-
-  const league =
-    match.league || {};
-
-  const teams =
-    match.teams || {};
-
-  const home =
-    teams.home || {};
-
-  const away =
-    teams.away || {};
-
-  const score =
-    getScore(
-      match
-    );
-
-  const isLive =
-    isLiveMatch(
-      match
-    );
-
-
-  const statusText =
-    getStatusText(
-      match
-    );
-
-
-  const elapsedText =
-    getElapsedText(
-      match
-    );
-
-
-  const kickoff =
-    formatKickoff(
-      fixture.date
-    );
-
-
-  const homeLogo =
-    safeImageUrl(
-      home.logo
-    );
-
-  const awayLogo =
-    safeImageUrl(
-      away.logo
-    );
-
-  const leagueLogo =
-    safeImageUrl(
-      league.logo
-    );
-
-
-  const round =
-    league.round ||
-    "مباراة";
-
-
-  const homeLogoHtml =
-    homeLogo
-      ? `
-        <img
-          class="team-logo"
-          src="${homeLogo}"
-          alt=""
-          loading="lazy"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-        >
-        <span
-          class="team-logo-fallback"
-          style="display:none"
-        >
-          ⚽
-        </span>
-      `
-      : `
-        <span class="team-logo-fallback">
-          ⚽
-        </span>
-      `;
-
-
-  const awayLogoHtml =
-    awayLogo
-      ? `
-        <img
-          class="team-logo"
-          src="${awayLogo}"
-          alt=""
-          loading="lazy"
-          onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-        >
-        <span
-          class="team-logo-fallback"
-          style="display:none"
-        >
-          ⚽
-        </span>
-      `
-      : `
-        <span class="team-logo-fallback">
-          ⚽
-        </span>
-      `;
-
-
-  const leagueLogoHtml =
-    leagueLogo
-      ? `
-        <img
-          class="league-logo"
-          src="${leagueLogo}"
-          alt=""
-          loading="lazy"
-          onerror="this.style.display='none';"
-        >
-      `
-      : `
-        <span
-          class="league-logo"
-          style="
-            display:grid;
-            place-items:center;
-            font-size:12px;
-          "
-        >
-          🏆
-        </span>
-      `;
-
-
-  return `
-    <article
-      class="match-card ${isLive ? "live" : ""}"
-      style="animation-delay:${Math.min(index * 35, 350)}ms"
-    >
-
-      <div class="match-top">
-
-        <div class="league-info">
-
-          ${leagueLogoHtml}
-
-          <span class="league-name">
-            ${escapeHtml(
-              league.name ||
-              "بطولة"
-            )}
-          </span>
-
-        </div>
-
-
-        <span
-          class="match-status ${isLive ? "live" : ""}"
-        >
-          ${isLive ? "🔴 " : ""}
-          ${escapeHtml(
-            isLive
-              ? elapsedText
-              : statusText
-          )}
-        </span>
-
-      </div>
-
-
-      <div class="match-main">
-
-
-        <div class="team home">
-
-          <div class="team-logo-wrap">
-            ${homeLogoHtml}
-          </div>
-
-          <div class="team-name">
-            ${escapeHtml(
-              home.name ||
-              "الفريق الأول"
-            )}
-          </div>
-
-        </div>
-
-
-        <div class="score-box">
-
-          <div class="score">
-
-            <span>
-              ${escapeHtml(
-                score.home
-              )}
-            </span>
-
-            <span class="score-divider">
-              -
-            </span>
-
-            <span>
-              ${escapeHtml(
-                score.away
-              )}
-            </span>
-
-          </div>
-
-
-          <div
-            class="score-time ${isLive ? "live" : ""}"
-          >
-            ${
-              isLive
-                ? elapsedText
-                : kickoff
-            }
-          </div>
-
-        </div>
-
-
-        <div class="team away">
-
-          <div class="team-logo-wrap">
-            ${awayLogoHtml}
-          </div>
-
-          <div class="team-name">
-            ${escapeHtml(
-              away.name ||
-              "الفريق الثاني"
-            )}
-          </div>
-
-        </div>
-
-
-      </div>
-
-
-      <div class="match-bottom">
-
-        <span class="match-round">
-          ${escapeHtml(
-            round
-          )}
-        </span>
-
-        <span>
-          ${escapeHtml(
-            league.country ||
-            ""
-          )}
-        </span>
-
-      </div>
-
-    </article>
-  `;
-
-}
-
-
-/* =========================================================
-   إنشاء قائمة المباريات
-========================================================= */
-
-function renderMatches(
-  matches,
-  emptyTitle,
-  emptyText
-) {
-
-  if (
-    !Array.isArray(matches) ||
-    matches.length === 0
-  ) {
-
-    footballMatches.innerHTML = `
-      <div class="football-empty glass">
-
-        <div class="football-empty-icon">
-          ⚽
-        </div>
-
-        <strong>
-          ${escapeHtml(
-            emptyTitle
-          )}
-        </strong>
-
-        <p>
-          ${escapeHtml(
-            emptyText
-          )}
-        </p>
-
-        <button
-          class="retry-btn"
-          id="emptyRefreshBtn"
-        >
-          تحديث الآن
-        </button>
-
-      </div>
-    `;
-
-
-    const emptyRefreshBtn =
-      document.getElementById(
-        "emptyRefreshBtn"
-      );
-
-
-    if (emptyRefreshBtn) {
-
-      emptyRefreshBtn.addEventListener(
-        "click",
-        () => {
-
-          loadFootball(
-            footballMode,
-            true
-          );
-
-        }
-      );
-
-    }
-
-
-    return;
-  }
-
-
-  const sorted =
-    [...matches]
-      .sort(
-        (a, b) => {
-
-          const liveA =
-            isLiveMatch(a);
-
-          const liveB =
-            isLiveMatch(b);
-
-          if (
-            liveA !==
-            liveB
-          ) {
-            return liveB - liveA;
-          }
-
-
-          const aTime =
-            a.fixture?.timestamp ||
-            0;
-
-          const bTime =
-            b.fixture?.timestamp ||
-            0;
-
-          return (
-            aTime -
-            bTime
-          );
-
-        }
-      );
-
-
-  footballMatches.innerHTML = `
-    <div class="matches-list">
-
-      ${sorted
-        .map(
-          (match, index) =>
-            createMatchCard(
-              match,
-              index
-            )
-        )
-        .join("")}
-
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
-   البطولات
-========================================================= */
-
-function renderCompetitions(
-  matches
-) {
-
-  if (
-    !Array.isArray(matches) ||
-    matches.length === 0
-  ) {
-
-    footballCompetitions.innerHTML =
-      "";
-
-    return;
-  }
-
-
-  const map =
-    new Map();
-
-
-  matches.forEach(
-    match => {
-
-      const league =
-        match.league;
-
-      if (!league) {
-        return;
-      }
-
-      const id =
-        league.id ||
-        league.name;
-
-      if (!map.has(id)) {
-
-        map.set(
-          id,
-          {
-            name:
-              league.name ||
-              "بطولة",
-
-            count: 0
-          }
-        );
-
-      }
-
-
-      map.get(id).count++;
-
-    }
-  );
-
-
-  const competitions =
-    [...map.values()]
-      .sort(
-        (a,b) =>
-          b.count -
-          a.count
-      )
-      .slice(0, 12);
-
-
-  if (
-    competitions.length === 0
-  ) {
-
-    footballCompetitions.innerHTML =
-      "";
-
-    return;
-  }
-
-
-  footballCompetitions.innerHTML = `
-    <div class="competitions-wrap">
-
-      <div class="competitions-title">
-        البطولات الموجودة حالياً
-      </div>
-
-      <div class="competition-list">
-
-        ${competitions
-          .map(
-            item => `
-              <span class="competition-chip">
-                🏆
-                ${escapeHtml(
-                  item.name
-                )}
-                ·
-                ${item.count}
-              </span>
-            `
-          )
-          .join("")}
-
-      </div>
-
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
-   الإحصائيات
-========================================================= */
-
-function updateFootballStats() {
-
-  const today =
-    Array.isArray(
-      footballToday
-    )
-      ? footballToday
-      : [];
-
-
-  const tomorrow =
-    Array.isArray(
-      footballTomorrow
-    )
-      ? footballTomorrow
-      : [];
-
-
-  const live =
-    today.filter(
-      isLiveMatch
-    );
-
-
-  const todayUpcoming =
-    today.filter(
-      isUpcomingMatch
-    );
-
-
-  const tomorrowUpcoming =
-    tomorrow.filter(
-      match =>
-        !FINISHED_STATUSES.has(
-          match.fixture?.status?.short
-        )
-    );
-
-
-  if (liveCount) {
-
-    liveCount.textContent =
-      live.length;
-
-  }
-
-
-  if (todayCount) {
-
-    todayCount.textContent =
-      today.length;
-
-  }
-
-
-  if (upcomingCount) {
-
-    upcomingCount.textContent =
-      todayUpcoming.length +
-      tomorrowUpcoming.length;
-
-  }
-
-}
-
-
-/* =========================================================
-   آخر تحديث
-========================================================= */
-
-function updateLastUpdateText() {
-
-  footballLastUpdate.textContent =
-    "آخر تحديث: " +
-    new Intl.DateTimeFormat(
-      "ar-SD",
-      {
-        timeZone:
-          FOOTBALL_TIMEZONE,
-
-        hour: "2-digit",
-
-        minute: "2-digit",
-
-        second: "2-digit"
-      }
-    ).format(
-      new Date()
-    );
-
-}
-
-
-/* =========================================================
-   التحقق من تغيير النتيجة
-========================================================= */
-
-function makeLiveSnapshot(
-  matches
-) {
-
-  return matches
-    .filter(
-      isLiveMatch
-    )
-    .map(
-      match => {
-
-        const id =
-          match.fixture?.id ??
-          "";
-
-        const home =
-          match.goals?.home ??
-          0;
-
-        const away =
-          match.goals?.away ??
-          0;
-
-        const elapsed =
-          match.fixture?.status?.elapsed ??
-          "";
-
-        const status =
-          match.fixture?.status?.short ??
-          "";
-
-        return [
-          id,
-          home,
-          away,
-          elapsed,
-          status
-        ].join("|");
-
-      }
-    )
-    .sort()
-    .join(";;");
-
-}
-
-
-/* =========================================================
-   تنبيه تغيير نتيجة
-========================================================= */
-
-function checkLiveChanges(
-  matches,
-  initial = false
-) {
-
-  if (
-    !notificationEnabled
-  ) {
-    return;
-  }
-
-
-  const currentSnapshot =
-    makeLiveSnapshot(
-      matches
-    );
-
-
-  if (
-    initial ||
-    !previousLiveSnapshot
-  ) {
-
-    previousLiveSnapshot =
-      currentSnapshot;
-
-    return;
-  }
-
-
-  if (
-    currentSnapshot ===
-    previousLiveSnapshot
-  ) {
-
-    return;
-  }
-
-
-  const oldSet =
-    new Set(
-      previousLiveSnapshot
-        .split(";;")
-        .filter(Boolean)
-    );
-
-
-  const changed =
-    matches.find(
-      match => {
-
-        if (
-          !isLiveMatch(
-            match
-          )
-        ) {
-          return false;
-        }
-
-
-        const id =
-          match.fixture?.id ??
-          "";
-
-        const home =
-          match.goals?.home ??
-          0;
-
-        const away =
-          match.goals?.away ??
-          0;
-
-        const elapsed =
-          match.fixture?.status?.elapsed ??
-          "";
-
-        const status =
-          match.fixture?.status?.short ??
-          "";
-
-
-        const signature =
-          [
-            id,
-            home,
-            away,
-            elapsed,
-            status
-          ].join("|");
-
-
-        return !oldSet.has(
-          signature
-        );
-
-      }
-    );
-
-
-  if (changed) {
-
-    const homeName =
-      changed.teams?.home?.name ||
-      "الفريق الأول";
-
-    const awayName =
-      changed.teams?.away?.name ||
-      "الفريق الثاني";
-
-    const homeScore =
-      changed.goals?.home ??
-      0;
-
-    const awayScore =
-      changed.goals?.away ??
-      0;
-
-
-    showToast(
-      "🔔 " +
-      homeName +
-      " " +
-      homeScore +
-      " - " +
-      awayScore +
-      " " +
-      awayName
-    );
-
-  }
-
-
-  previousLiveSnapshot =
-    currentSnapshot;
-
-}
-
-
-/* =========================================================
-   تنسيق شاشة الخطأ
-========================================================= */
-
-function renderFootballError(
-  error
-) {
-
-  const message =
-    error?.message ||
-    "حدث خطأ أثناء جلب المباريات.";
-
-
-  footballApiStatus.textContent =
-    "تعذر الاتصال";
-
-
-  footballLastUpdate.textContent =
-    "تحقق من الإنترنت ومفتاح API";
-
-
-  footballMatches.innerHTML = `
-    <div class="football-empty glass">
-
-      <div class="football-empty-icon">
-        ⚠️
-      </div>
-
-      <strong>
-        تعذر جلب مباريات كرة القدم
-      </strong>
-
-      <p>
-        ${escapeHtml(
-          message
-        )}
-      </p>
-
-      <button
-        class="retry-btn"
-        id="footballErrorRetry"
-      >
-        المحاولة مرة أخرى
-      </button>
-
-    </div>
-  `;
-
-
-  const retry =
-    document.getElementById(
-      "footballErrorRetry"
-    );
-
-
-  if (retry) {
-
-    retry.addEventListener(
-      "click",
-      () => {
-
-        loadFootball(
-          footballMode,
-          true
-        );
-
-      }
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   تحميل قسم كرة القدم
-========================================================= */
-
-async function loadFootball(
-  mode = "live",
-  force = false
-) {
-
-  if (
-    footballRequestRunning
-  ) {
-    return;
-  }
-
-
-  footballRequestRunning =
-    true;
-
-
-  footballMode =
-    mode;
-
-
-  footballApiStatus.textContent =
-    "جاري التحديث...";
-
-
-  footballRefreshBtn.classList.add(
-    "loading"
-  );
-
-
-  renderLoadingIfNeeded();
+  footballList.innerHTML =
+    "";
 
 
   try {
 
-    let activeMatches =
-      [];
+    /*
+      المباريات المباشرة
+    */
 
-
-    if (
-      mode === "upcoming"
-    ) {
-
-      /*
-        القادم = مباريات الغد.
-      */
-      await loadTomorrow(
-        force
-      );
-
-      activeMatches =
-        footballTomorrow.filter(
-          match =>
-            isUpcomingMatch(match) ||
-            !FINISHED_STATUSES.has(
-              match.fixture?.status?.short
-            )
-        );
-
-
-    } else {
-
-      /*
-        اليوم والمباشر:
-        نفس طلب اليوم.
-      */
-      await loadToday(
-        force
+    const live =
+      await footballRequest(
+        "/fixtures?live=all"
       );
 
 
-      activeMatches =
-        footballToday;
+    /*
+      مباريات اليوم
+    */
 
-    }
+    const todayDate =
+      getTodayDate();
 
-
-    updateFootballStats();
-
-
-    if (
-      footballDateText
-    ) {
-
-      const currentDate =
-        mode === "upcoming"
-          ? getDateInTimeZone(
-              FOOTBALL_TIMEZONE,
-              1
-            )
-          : getDateInTimeZone();
-
-      footballDateText.textContent =
-        formatArabicDate(
-          currentDate
-        );
-
-    }
-
-
-    let displayMatches =
-      activeMatches;
-
-
-    if (
-      mode === "live"
-    ) {
-
-      displayMatches =
-        activeMatches.filter(
-          isLiveMatch
-        );
-
-
-      renderMatches(
-        displayMatches,
-
-        "لا توجد مباراة مباشرة الآن",
-
-        "عندما تبدأ المباريات سنعرضها هنا مع النتيجة والدقيقة والتحديثات."
+    const today =
+      await footballRequest(
+        `/fixtures?date=${todayDate}`
       );
 
 
-    } else if (
-      mode === "today"
-    ) {
+    /*
+      نخلي المباريات القادمة
+      من مباريات اليوم فقط.
+    */
 
-      displayMatches =
-        activeMatches;
+    const upcoming =
+      today.filter(
+        fixture => {
 
-      renderMatches(
-        displayMatches,
+          const status =
+            fixture.fixture.status.short;
 
-        "لا توجد مباريات اليوم",
+          return (
+            status === "NS" ||
+            status === "TBD"
+          );
 
-        "لم تظهر مباريات متاحة لهذا اليوم في البيانات الحالية."
+        }
       );
 
 
-    } else {
+    footballData = {
 
-      displayMatches =
-        activeMatches;
+      live,
+      today,
+      upcoming
 
-      renderMatches(
-        displayMatches,
-
-        "لا توجد مباريات قادمة غداً",
-
-        "لم نجد مباريات قادمة متاحة للغد في البيانات الحالية."
-      );
-
-    }
+    };
 
 
-    renderCompetitions(
-      displayMatches
+    footballLoading.classList.add(
+      "hidden"
     );
 
 
-    footballApiStatus.textContent =
-      "متصل بالخدمة ✓";
+    footballUpdated.textContent =
+      `آخر تحديث: ${new Date().toLocaleTimeString(
+        "ar",
+        {
+          hour: "2-digit",
+          minute: "2-digit"
+        }
+      )}`;
 
 
-    updateLastUpdateText();
-
-
-    checkLiveChanges(
-      footballToday,
-      footballLastFetchTime === 0
-    );
+    renderFootball();
 
 
   } catch (error) {
 
     console.error(
-      "Football API Error:",
       error
     );
 
-    renderFootballError(
-      error
-    );
 
-  } finally {
-
-    footballRequestRunning =
-      false;
-
-    footballRefreshBtn.classList.remove(
-      "loading"
-    );
-
-    updateFootballTimer();
-
-  }
-
-}
-
-
-/* =========================================================
-   شاشة تحميل
-========================================================= */
-
-function renderLoadingIfNeeded() {
-
-  if (
-    footballMatches.children.length > 0 &&
-    !footballMatches.querySelector(
-      ".football-loading"
-    )
-  ) {
-    return;
-  }
-
-
-  footballMatches.innerHTML = `
-    <div class="football-loading glass">
-
-      <div class="loading-spinner"></div>
-
-      <strong>
-        جاري جلب المباريات
-      </strong>
-
-      <span>
-        يتم الاتصال بمصدر النتائج...
-      </span>
-
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
-   التبديل بين مباشر / اليوم / القادم
-========================================================= */
-
-footballTabs.forEach(
-  tab => {
-
-    tab.addEventListener(
-      "click",
-      () => {
-
-        footballTabs.forEach(
-          item =>
-            item.classList.remove(
-              "active"
-            )
-        );
-
-
-        tab.classList.add(
-          "active"
-        );
-
-
-        const mode =
-          tab.dataset.footballTab;
-
-
-        loadFootball(
-          mode,
-          false
-        );
-
-      }
-    );
-
-  }
-);
-
-
-/* =========================================================
-   زر كرة القدم من الرئيسية
-========================================================= */
-
-footballBtn.addEventListener(
-  "click",
-  () => {
-
-    showScreen(
-      footballScreen
+    footballLoading.classList.add(
+      "hidden"
     );
 
 
-    /*
-      نبدأ دائماً من مباشر.
-    */
-    setFootballTab(
-      "live"
+    footballEmpty.classList.remove(
+      "hidden"
     );
-
-
-    /*
-      إظهار الكاش مباشرة إن كان موجوداً.
-    */
-    const cached =
-      storageGet(
-        "wad_faisal_fixtures_" +
-        getDateInTimeZone(),
-        null
-      );
 
 
     if (
-      cached &&
-      Array.isArray(
-        cached.response
-      )
+      error.message ===
+      "API_KEY_MISSING"
     ) {
 
-      footballToday =
-        cached.response;
+      footballEmpty.innerHTML = `
 
-      updateFootballStats();
+        <div>🔑</div>
 
-      renderMatches(
-        footballToday.filter(
-          isLiveMatch
-        ),
+        <h3>
+          مفتاح API غير موجود
+        </h3>
 
-        "لا توجد مباراة مباشرة الآن",
+        <p>
+          ضع مفتاح API-Football
+          داخل ملف script.js.
+        </p>
 
-        "إذا كانت هناك مباراة شغالة حالياً فستظهر هنا."
-      );
+      `;
 
-      renderCompetitions(
-        footballToday.filter(
-          isLiveMatch
-        )
-      );
+    } else {
+
+      footballEmpty.innerHTML = `
+
+        <div>📡</div>
+
+        <h3>
+          تعذر جلب النتائج
+        </h3>
+
+        <p>
+          تأكد من الإنترنت
+          ومفتاح API ثم حاول مرة أخرى.
+        </p>
+
+      `;
 
     }
 
+  }
 
-    loadFootball(
-      "live",
-      false
-    );
+}
 
 
-    startFootballAutoRefresh();
+/* =========================
+   عرض المباريات
+========================= */
+
+function renderFootball() {
+
+  footballList.innerHTML =
+    "";
+
+
+  let matches = [];
+
+
+  if (
+    currentFootballTab ===
+    "live"
+  ) {
+
+    matches =
+      footballData.live;
 
   }
-);
 
 
-/* =========================================================
-   العودة من قسم الكورة
-========================================================= */
+  if (
+    currentFootballTab ===
+    "today"
+  ) {
 
-backFootballHomeBtn.addEventListener(
-  "click",
-  () => {
-
-    stopFootballAutoRefresh();
-
-    showScreen(
-      homeScreen
-    );
+    matches =
+      footballData.today;
 
   }
-);
 
 
-/* =========================================================
-   تغيير التبويب برمجياً
-========================================================= */
+  if (
+    currentFootballTab ===
+    "upcoming"
+  ) {
 
-function setFootballTab(
-  mode
-) {
+    matches =
+      footballData.upcoming;
 
-  footballMode =
-    mode;
+  }
 
 
-  footballTabs.forEach(
-    tab => {
+  if (
+    !matches ||
+    matches.length === 0
+  ) {
 
-      tab.classList.toggle(
-        "active",
-        tab.dataset.footballTab ===
-          mode
+    footballEmpty.classList.remove(
+      "hidden"
+    );
+
+    footballEmpty.innerHTML = `
+
+      <div>⚽</div>
+
+      <h3>
+        لا توجد مباريات
+      </h3>
+
+      <p>
+        لا توجد مباريات ضمن هذا القسم حالياً.
+      </p>
+
+    `;
+
+    return;
+
+  }
+
+
+  footballEmpty.classList.add(
+    "hidden"
+  );
+
+
+  matches.forEach(
+    match => {
+
+      footballList.appendChild(
+        createMatchCard(
+          match
+        )
       );
 
     }
@@ -2612,113 +901,423 @@ function setFootballTab(
 }
 
 
-/* =========================================================
-   زر تحديث كرة القدم
-========================================================= */
+/* =========================
+   بطاقة المباراة
+========================= */
 
-footballRefreshBtn.addEventListener(
+function createMatchCard(
+  match
+) {
+
+  const card =
+    document.createElement(
+      "article"
+    );
+
+
+  card.className =
+    "match-card glass";
+
+
+  const fixture =
+    match.fixture;
+
+  const teams =
+    match.teams;
+
+  const goals =
+    match.goals;
+
+  const league =
+    match.league;
+
+
+  const status =
+    fixture.status;
+
+
+  const isLive =
+    isLiveStatus(
+      status.short
+    );
+
+
+  const minute =
+    status.elapsed
+      ? `${status.elapsed}'`
+      : "";
+
+
+  const scoreHome =
+    goals.home ?? "-";
+
+  const scoreAway =
+    goals.away ?? "-";
+
+
+  const homeLogo =
+    teams.home.logo || "";
+
+
+  const awayLogo =
+    teams.away.logo || "";
+
+
+  let statusText =
+    getStatusText(
+      status.short
+    );
+
+
+  if (isLive) {
+
+    statusText =
+      `🔴 مباشر • ${minute}`;
+
+  }
+
+
+  card.innerHTML = `
+
+    <div class="match-league">
+
+      <span>
+        ${escapeHtml(
+          league.name || "كرة القدم"
+        )}
+      </span>
+
+      <span class="${
+        isLive
+          ? "match-live"
+          : ""
+      }">
+
+        ${statusText}
+
+      </span>
+
+    </div>
+
+
+    <div class="match-teams">
+
+
+      <div class="team home">
+
+        <div class="team-name">
+
+          ${escapeHtml(
+            teams.home.name
+          )}
+
+        </div>
+
+        <img
+          src="${homeLogo}"
+          alt=""
+          onerror="this.style.display='none'"
+        >
+
+      </div>
+
+
+      <div class="match-score">
+
+        <div class="score">
+
+          ${scoreHome}
+          -
+          ${scoreAway}
+
+        </div>
+
+        ${
+          isLive
+            ? `
+              <div class="minute">
+                ${minute}
+              </div>
+            `
+            : ""
+        }
+
+      </div>
+
+
+      <div class="team away">
+
+        <img
+          src="${awayLogo}"
+          alt=""
+          onerror="this.style.display='none'"
+        >
+
+        <div class="team-name">
+
+          ${escapeHtml(
+            teams.away.name
+          )}
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="match-status">
+
+      ${getMatchDescription(
+        status.short
+      )}
+
+    </div>
+
+
+    ${
+      isLive
+        ? `
+          <button
+            class="watch-btn"
+            data-fixture="${fixture.id}">
+            📺 مشاهدة مباشر
+          </button>
+        `
+        : ""
+    }
+
+  `;
+
+
+  const watchButton =
+    card.querySelector(
+      ".watch-btn"
+    );
+
+
+  if (watchButton) {
+
+    watchButton.addEventListener(
+      "click",
+      () => {
+
+        showToast(
+          "البث المرئي يحتاج مصدر بث متاح لهذه المباراة"
+        );
+
+      }
+    );
+
+  }
+
+
+  return card;
+
+}
+
+
+/* =========================
+   حالات المباراة
+========================= */
+
+function isLiveStatus(
+  status
+) {
+
+  return [
+
+    "1H",
+    "HT",
+    "2H",
+    "ET",
+    "BT",
+    "P"
+
+  ].includes(
+    status
+  );
+
+}
+
+
+/* =========================
+   اسم الحالة
+========================= */
+
+function getStatusText(
+  status
+) {
+
+  const statuses = {
+
+    NS: "لم تبدأ",
+
+    TBD: "موعد غير محدد",
+
+    FT: "انتهت",
+
+    AET: "بعد الوقت الإضافي",
+
+    PEN: "ركلات ترجيح",
+
+    PST: "تأجلت",
+
+    CANC: "ألغيت",
+
+    SUSP: "متوقفة",
+
+    1H: "الشوط الأول",
+
+    HT: "استراحة",
+
+    2H: "الشوط الثاني",
+
+    ET: "وقت إضافي",
+
+    BT: "استراحة إضافية",
+
+    P: "ركلات ترجيح"
+
+  };
+
+
+  return (
+    statuses[status] ||
+    status ||
+    "غير معروف"
+  );
+
+}
+
+
+/* =========================
+   وصف المباراة
+========================= */
+
+function getMatchDescription(
+  status
+) {
+
+  if (
+    isLiveStatus(
+      status
+    )
+  ) {
+
+    return "المباراة جارية الآن";
+
+  }
+
+
+  if (
+    status === "FT"
+  ) {
+
+    return "المباراة انتهت";
+
+  }
+
+
+  if (
+    status === "NS" ||
+    status === "TBD"
+  ) {
+
+    return "المباراة لم تبدأ بعد";
+
+  }
+
+
+  return getStatusText(
+    status
+  );
+
+}
+
+
+/* =========================
+   تحديث يدوي
+========================= */
+
+refreshFootballBtn.addEventListener(
   "click",
   () => {
 
-    if (
-      Date.now() -
-      footballLastFetchTime <
-      FOOTBALL_MIN_REQUEST_GAP
-    ) {
-
-      showToast(
-        "انتظر قليلاً قبل التحديث مرة أخرى"
-      );
-
-      return;
-    }
-
-
-    loadFootball(
-      footballMode,
-      true
-    );
+    loadFootball();
 
   }
 );
 
 
-/* =========================================================
-   تنبيهات المباريات
-========================================================= */
+/* =========================
+   Tabs
+========================= */
 
-footballNotifyBtn.addEventListener(
-  "click",
-  () => {
+document
+  .querySelectorAll(
+    ".football-tab"
+  )
+  .forEach(button => {
 
-    notificationEnabled =
-      !notificationEnabled;
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(
+            ".football-tab"
+          )
+          .forEach(
+            tab =>
+              tab.classList.remove(
+                "active"
+              )
+          );
 
 
-    storageSet(
-      "wad_faisal_football_notifications",
-      notificationEnabled
+        button.classList.add(
+          "active"
+        );
+
+
+        currentFootballTab =
+          button.dataset.tab;
+
+
+        renderFootball();
+
+      }
     );
 
-
-    updateNotificationButton();
-
-
-    if (
-      notificationEnabled
-    ) {
-
-      showToast(
-        "🔔 تم تفعيل تنبيهات المباريات داخل التطبيق"
-      );
-
-    } else {
-
-      showToast(
-        "🔕 تم إيقاف تنبيهات المباريات"
-      );
-
-    }
-
-  }
-);
+  });
 
 
-/* =========================================================
-   التحديث التلقائي
-========================================================= */
+/* =========================
+   تحديث تلقائي
+========================= */
 
 function startFootballAutoRefresh() {
 
   stopFootballAutoRefresh();
 
 
-  footballRefreshTimer =
+  footballTimer =
     setInterval(
       () => {
 
-        /*
-          لا نحدث إلا إذا كانت
-          شاشة الكورة ظاهرة.
-        */
         if (
           footballScreen.classList.contains(
             "active"
           )
         ) {
 
-          /*
-            نحدث بيانات اليوم فقط.
-          */
-          loadFootball(
-            "live",
-            true
-          );
+          loadFootball();
 
         }
 
       },
-      FOOTBALL_REFRESH_MS
+      15000
     );
 
 }
@@ -2727,14 +1326,14 @@ function startFootballAutoRefresh() {
 function stopFootballAutoRefresh() {
 
   if (
-    footballRefreshTimer
+    footballTimer
   ) {
 
     clearInterval(
-      footballRefreshTimer
+      footballTimer
     );
 
-    footballRefreshTimer =
+    footballTimer =
       null;
 
   }
@@ -2742,44 +1341,78 @@ function stopFootballAutoRefresh() {
 }
 
 
-/* =========================================================
-   تحديث الحالة النصية
-========================================================= */
+/*
+  تشغيل التحديث عند فتح القسم
+*/
 
-function updateFootballTimer() {
+footballBtn.addEventListener(
+  "click",
+  () => {
+
+    startFootballAutoRefresh();
+
+  }
+);
+
+
+/* =========================
+   حماية النصوص
+========================= */
+
+function escapeHtml(
+  value
+) {
 
   if (
-    !footballScreen ||
-    !footballScreen.classList.contains(
-      "active"
-    )
+    value === null ||
+    value === undefined
   ) {
-    return;
+
+    return "";
+
   }
 
 
-  /*
-    مجرد توضيح للمستخدم.
-  */
-  footballApiStatus.textContent =
-    footballRequestRunning
-      ? "جاري التحديث..."
-      : "جاهز";
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-/* =========================================================
-   إغلاق المودالات بزر الرجوع Escape
-========================================================= */
+/* =========================
+   زر ESC
+========================= */
 
 document.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.key ===
-      "Escape"
+      event.key === "Escape"
     ) {
 
       document
@@ -2794,10 +1427,3 @@ document.addEventListener(
 
   }
 );
-
-
-/* =========================================================
-   بداية التطبيق
-========================================================= */
-
-updateFootballStats();
