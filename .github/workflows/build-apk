@@ -5,41 +5,121 @@ on:
   push:
     branches:
       - main
-      - master
 
 jobs:
   build:
     name: Build Android APK
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
+      # 1. تحميل ملفات المشروع
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup JDK
+      # 2. تثبيت Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3. تثبيت Java 21
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
-          cache: gradle
+          java-version: '21'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Make Gradle executable
-        run: chmod +x ./gradlew
-
-      - name: Build APK
-        run: ./gradlew assembleDebug --stacktrace
-
-      - name: Find APK
+      # 4. التأكد من ملفات المشروع
+      - name: Check project files
         run: |
-          echo "APK files:"
-          find . -type f -name "*.apk"
+          echo "Project files:"
+          ls -la
 
+          echo "Checking required files..."
+
+          test -f index.html
+          test -f script.js
+          test -f style.css
+
+          echo "All required files found."
+
+      # 5. إنشاء مجلد Web
+      - name: Prepare Web App
+        run: |
+          rm -rf www
+          mkdir -p www
+
+          cp index.html www/index.html
+          cp script.js www/script.js
+          cp style.css www/style.css
+
+          echo "Web files copied:"
+          ls -la www
+
+      # 6. إنشاء package.json
+      - name: Create package.json
+        run: |
+          cat > package.json <<'EOF'
+          {
+            "name": "apply-web-app",
+            "version": "1.0.0",
+            "private": true
+          }
+          EOF
+
+      # 7. تثبيت Capacitor
+      - name: Install Capacitor
+        run: |
+          npm install @capacitor/core@8 @capacitor/cli@8 @capacitor/android@8
+
+      # 8. إنشاء إعداد Capacitor
+      - name: Initialize Capacitor
+        run: |
+          npx cap init "Apply" "com.sudaneseblack.apply" --web-dir=www
+
+      # 9. إضافة Android
+      - name: Add Android
+        run: |
+          npx cap add android
+
+      # 10. نسخ ملفات الموقع إلى Android
+      - name: Sync Android
+        run: |
+          npx cap sync android
+
+      # 11. التأكد من وجود Gradle
+      - name: Check Android project
+        run: |
+          test -f android/gradlew
+          test -f android/app/build.gradle
+          echo "Android project created successfully."
+
+      # 12. إعطاء صلاحية التنفيذ لـ Gradle
+      - name: Make Gradle executable
+        run: |
+          chmod +x android/gradlew
+
+      # 13. بناء APK
+      - name: Build Debug APK
+        working-directory: android
+        run: |
+          ./gradlew assembleDebug --stacktrace
+
+      # 14. التأكد من وجود APK
+      - name: Verify APK
+        run: |
+          echo "Searching for APK..."
+          find android -type f -name "*.apk" -print
+
+          test -f android/app/build/outputs/apk/debug/app-debug.apk
+
+          echo "APK BUILD SUCCESSFUL!"
+
+      # 15. رفع APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug-apk
-          path: "**/build/outputs/apk/debug/*.apk"
+          name: Apply-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
