@@ -1,72 +1,42 @@
-name: Deploy Football App
+name: Deploy Wad Faisal to GitHub Pages
 
 on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "github-pages"
+  cancel-in-progress: true
 
 jobs:
   deploy:
+    name: Deploy Website
     runs-on: ubuntu-latest
 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
-      - name: تحميل المشروع
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-      - name: التحقق من الملفات
-        run: |
-          echo "=== ملفات المشروع ==="
-          ls -la
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
-          echo "=== التحقق من الملفات المطلوبة ==="
-
-          if [ ! -f "index.html" ]; then
-            echo "ERROR: index.html غير موجود"
-            exit 1
-          fi
-
-          if [ ! -f "style.css" ]; then
-            echo "ERROR: style.css غير موجود"
-            exit 1
-          fi
-
-          if [ ! -f "app.js" ]; then
-            echo "ERROR: app.js غير موجود"
-            exit 1
-          fi
-
-          echo "index.html موجود"
-          echo "style.css موجود"
-          echo "app.js موجود"
-
-      - name: إنشاء مجلد النشر
-        run: |
-          rm -rf dist
-          mkdir -p dist
-
-          cp index.html dist/index.html
-          cp style.css dist/style.css
-          cp app.js dist/app.js
-
-      - name: التحقق النهائي
-        run: |
-          echo "=== ملفات dist ==="
-          ls -la dist
-
-          test -s dist/index.html
-          test -s dist/style.css
-          test -s dist/app.js
-
-          echo "تم تجهيز التطبيق بنجاح"
-          echo "لا يوجد script.js في المشروع"
-
-      - name: النشر إلى GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload website files
+        uses: actions/upload-pages-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          force_orphan: true
+          path: "."
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
