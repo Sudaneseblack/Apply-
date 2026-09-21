@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#07111f">
+
+    <title>ود فيصل | VIP</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- الخلفية -->
+    <div class="background">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="stars">✦　·　✧　·　✦　·　✧</div>
+    </div>
+
+    <!-- التطبيق -->
+    <main class="app">
+
+        <!-- الشعار -->
+        <section class="header">
+            <div class="logo">✈</div>
+
+            <div class="vip">VIP ACCESS</div>
+
+            <h1>ود <span>فيصل</span></h1>
+
+            <p>
+                مرحباً بك في التطبيق الرسمي
+            </p>
+
+            <small>
+                كل ما تحتاجه في مكان واحد
+            </small>
+        </section>
+
+
+        <!-- الصفحة الرئيسية -->
+        <section id="home" class="page active">
+
+            <button class="menu-button channel" onclick="openChannel()">
+                <div class="button-icon">📢</div>
+
+                <div class="button-text">
+                    <strong>دخول إلى القناة</strong>
+                    <span>انتقل إلى قناتي على Telegram</span>
+                </div>
+
+                <div class="arrow">‹</div>
+            </button>
+
+
+            <button class="menu-button tutorials" onclick="showPage('tutorials')">
+                <div class="button-icon">📚</div>
+
+                <div class="button-text">
+                    <strong>شروحات القناة</strong>
+                    <span>تعرف على الخدمات وطريقة الاستخدام</span>
+                </div>
+
+                <div class="arrow">‹</div>
+            </button>
+
+
+            <button class="menu-button private" onclick="openPrivate()">
+                <div class="button-icon">💬</div>
+
+                <div class="button-text">
+                    <strong>رسالة خاصة</strong>
+                    <span>تواصل مباشرة مع المطور</span>
+                </div>
+
+                <div class="arrow">‹</div>
+            </button>
+
+        </section>
+
+
+        <!-- صفحة الشروحات -->
+        <section id="tutorials" class="page">
+
+            <button class="back-button" onclick="showPage('home')">
+                → العودة للرئيسية
+            </button>
+
+            <div class="page-title">
+                <div class="title-icon">📚</div>
+                <h2>شروحات القناة</h2>
+                <p>اختر الشرح الذي تريد قراءته</p>
+            </div>
+
+
+            <div class="tutorial-card" onclick="showTutorial(1)">
+                <span>01</span>
+                <div>
+                    <strong>التعريف بالقناة</strong>
+                    <small>تعرف على القناة والخدمات الموجودة فيها</small>
+                </div>
+            </div>
+
+
+            <div class="tutorial-card" onclick="showTutorial(2)">
+                <span>02</span>
+                <div>
+                    <strong>طريقة الاستخدام</strong>
+                    <small>شرح مبسط لكيفية استخدام خدماتنا</small>
+                </div>
+            </div>
+
+
+            <div class="tutorial-card" onclick="showTutorial(3)">
+                <span>03</span>
+                <div>
+                    <strong>الأسئلة الشائعة</strong>
+                    <small>أهم الأسئلة والإجابات</small>
+                </div>
+            </div>
+
+
+            <div id="tutorial-content" class="tutorial-content"></div>
+
+        </section>
+
+
+        <!-- معلومات الرسالة الخاصة -->
+        <section id="private" class="page">
+
+            <button class="back-button" onclick="showPage('home')">
+                → العودة للرئيسية
+            </button>
+
+            <div class="private-box">
+
+                <div class="private-icon">💬</div>
+
+                <h2>رسالة خاصة</h2>
+
+                <p>
+                    يمكنك التواصل مباشرة مع المطور عبر Telegram.
+                </p>
+
+                <textarea id="message"
+                    placeholder="اكتب رسالتك هنا...">السلام عليكم، أريد التواصل معك بخصوص القناة.</textarea>
+
+                <button class="send-button" onclick="sendTelegramMessage()">
+                    فتح Telegram وإرسال الرسالة
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- التذييل -->
+        <footer>
+            <div>ود فيصل</div>
+            <small>VIP • Telegram Community</small>
+            <p>© 2026 جميع الحقوق محفوظة</p>
+        </footer>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
