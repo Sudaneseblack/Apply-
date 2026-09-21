@@ -17,16 +17,14 @@ jobs:
 
       # 1 - تحميل ملفات المستودع
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
-
-      # 2 - إعداد Java
+      # 2 - إعداد Java 17
       - name: Setup Java 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
-
 
       # 3 - إعداد Gradle
       - name: Setup Gradle
@@ -34,15 +32,20 @@ jobs:
         with:
           gradle-version: '9.6.0'
 
-
-      # 4 - تجهيز Android SDK
+      # 4 - إعداد Android SDK
       - name: Setup Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ''
+
+      # 5 - تثبيت Android SDK المطلوبة
+      - name: Install Android SDK packages
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-36"
+          sdkmanager "build-tools;36.0.0"
 
-
-      # 5 - إنشاء مشروع Android
+      # 6 - إنشاء مشروع Android
       - name: Create Android Project
         run: |
 
@@ -50,7 +53,6 @@ jobs:
           mkdir -p app/src/main/res/values
           mkdir -p app/src/main/res/drawable
           mkdir -p app/src/main/assets
-
 
           # settings.gradle
           cat > settings.gradle <<'EOF'
@@ -75,7 +77,6 @@ jobs:
           include(":app")
           EOF
 
-
           # build.gradle
           cat > build.gradle <<'EOF'
           plugins {
@@ -83,14 +84,12 @@ jobs:
           }
           EOF
 
-
           # gradle.properties
           cat > gradle.properties <<'EOF'
           org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
           android.useAndroidX=true
           android.nonTransitiveRClass=true
           EOF
-
 
           # app/build.gradle
           cat > app/build.gradle <<'EOF'
@@ -121,7 +120,6 @@ jobs:
           }
           EOF
 
-
           # AndroidManifest.xml
           cat > app/src/main/AndroidManifest.xml <<'EOF'
           <?xml version="1.0" encoding="utf-8"?>
@@ -151,7 +149,6 @@ jobs:
 
           </manifest>
           EOF
-
 
           # MainActivity.java
           cat > app/src/main/java/org/wadfaisal/app/MainActivity.java <<'EOF'
@@ -193,7 +190,7 @@ jobs:
                               WebResourceRequest request) {
 
                           return openTelegram(
-                              request.getUrl().toString()
+                                  request.getUrl().toString()
                           );
                       }
 
@@ -210,7 +207,6 @@ jobs:
                           "file:///android_asset/index.html"
                   );
               }
-
 
               private boolean openTelegram(String url) {
 
@@ -236,7 +232,6 @@ jobs:
                   return false;
               }
 
-
               @Override
               public void onBackPressed() {
 
@@ -246,7 +241,6 @@ jobs:
                       super.onBackPressed();
                   }
               }
-
 
               @Override
               protected void onDestroy() {
@@ -259,7 +253,6 @@ jobs:
               }
           }
           EOF
-
 
           # styles.xml
           cat > app/src/main/res/values/styles.xml <<'EOF'
@@ -295,7 +288,6 @@ jobs:
           </resources>
           EOF
 
-
           # أيقونة التطبيق
           cat > app/src/main/res/drawable/ic_launcher.xml <<'EOF'
           <vector
@@ -316,8 +308,7 @@ jobs:
           </vector>
           EOF
 
-
-      # 6 - نسخ ملفات التطبيق HTML
+      # 7 - نسخ ملفات HTML/CSS/JS
       - name: Copy Web App
         run: |
 
@@ -325,14 +316,12 @@ jobs:
           cp style.css app/src/main/assets/style.css
           cp script.js app/src/main/assets/script.js
 
-
-      # 7 - بناء APK
+      # 8 - بناء APK
       - name: Build APK
         run: |
-          gradle assembleDebug
+          gradle assembleDebug --no-daemon
 
-
-      # 8 - رفع APK كملف قابل للتنزيل
+      # 9 - رفع APK
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
