@@ -2,71 +2,83 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#07111f">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,
+        maximum-scale=1.0, user-scalable=no">
+
+  <meta name="theme-color" content="#050b16">
+
   <title>ود فيصل</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="ambient ambient-1"></div>
-  <div class="ambient ambient-2"></div>
+
+  <!-- خلفية -->
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
   <div class="stars"></div>
 
-  <!-- =========================
-       صفحة الدخول
-  ========================== -->
+  <!-- ========================= -->
+  <!-- شاشة الدخول -->
+  <!-- ========================= -->
+
   <main id="welcomeScreen" class="screen welcome-screen active">
+
     <div class="welcome-card glass">
 
-      <div class="logo-wrap">
-        <div class="logo-ring"></div>
-        <div class="logo">و</div>
+      <div class="logo-box">
+        <div class="logo-glow"></div>
+        <div class="football-logo">⚽</div>
       </div>
 
-      <div class="eyebrow">مرحباً بك</div>
+      <div class="small-label">مرحباً بك في</div>
 
       <h1>ود فيصل</h1>
 
-      <p class="welcome-text">
-        تطبيقك للوصول السريع إلى القناة والتواصل المباشر مع المطور،
-        ومتابعة كرة القدم أولاً بأول.
+      <p>
+        تطبيقك للوصول السريع إلى القناة
+        والتواصل مع المطور ومتابعة كرة القدم
+        مباشرة.
       </p>
 
-      <button class="primary-btn" id="enterBtn">
+      <button id="enterBtn" class="primary-btn">
         <span>دخول إلى التطبيق</span>
-        <span class="btn-arrow">←</span>
+        <span>←</span>
       </button>
 
-      <div class="welcome-note">
-        واجهة جديدة • أسرع • أوضح • أسهل
+      <div class="welcome-info">
+        ⚡ سريع • بسيط • متجدد
       </div>
 
     </div>
+
   </main>
 
 
-  <!-- =========================
-       الصفحة الرئيسية
-  ========================== -->
+  <!-- ========================= -->
+  <!-- الصفحة الرئيسية -->
+  <!-- ========================= -->
+
   <main id="homeScreen" class="screen home-screen">
 
     <header class="topbar glass">
 
       <div class="brand">
-        <div class="mini-logo">و</div>
+
+        <div class="mini-logo">
+          و
+        </div>
 
         <div>
           <strong>ود فيصل</strong>
           <span>مرحباً بك من جديد</span>
         </div>
+
       </div>
 
-      <button
-        class="icon-btn"
-        id="aboutBtn"
-        aria-label="حول التطبيق"
-      >
+      <button id="aboutBtn" class="icon-btn">
         i
       </button>
 
@@ -75,95 +87,112 @@
 
     <section class="hero glass">
 
-      <div class="status-pill">
-        <span class="pulse-dot"></span>
+      <div class="live-status">
+        <span></span>
         التطبيق يعمل
       </div>
 
-      <h2>شنو عايز تعمل؟</h2>
+      <h2>
+        شنو عايز تعمل؟
+      </h2>
 
       <p>
-        اختر الخدمة التي تريد الوصول إليها بسرعة.
+        اختر القسم الذي تريد الوصول إليه.
       </p>
 
     </section>
 
 
+    <!-- الخدمات -->
+
     <section class="action-grid">
 
-      <!-- القناة -->
-      <button class="action-card glass" id="channelBtn">
+      <button id="channelBtn"
+              class="action-card glass">
 
-        <span class="action-icon">✈</span>
+        <div class="card-icon">
+          ✈
+        </div>
 
-        <span class="action-title">
+        <strong>
           خش القناة
-        </span>
+        </strong>
 
-        <span class="action-desc">
+        <span>
           افتح قناة Telegram مباشرة
         </span>
 
-        <span class="action-go">←</span>
+        <b>←</b>
 
       </button>
 
 
-      <!-- المطور -->
-      <button class="action-card glass" id="developerBtn">
+      <button id="developerBtn"
+              class="action-card glass">
 
-        <span class="action-icon">⌘</span>
+        <div class="card-icon">
+          ⌘
+        </div>
 
-        <span class="action-title">
-          اتعرف على المطور
+        <strong>
+          المطور
+        </strong>
+
+        <span>
+          تعرف على المطور وتواصل معه
         </span>
 
-        <span class="action-desc">
-          معلومات التواصل مع المطور
-        </span>
-
-        <span class="action-go">←</span>
+        <b>←</b>
 
       </button>
 
 
-      <!-- كورة -->
-      <button class="action-card glass football-home-card full" id="footballBtn">
+      <button id="messageBtn"
+              class="action-card glass">
 
-        <span class="football-live-badge">
-          <span class="live-badge-dot"></span>
-          مباشر
+        <div class="card-icon">
+          ✉
+        </div>
+
+        <strong>
+          رسالة خاصة
+        </strong>
+
+        <span>
+          أرسل فكرة أو اقتراح للمطور
         </span>
 
-        <span class="action-icon football-icon">⚽</span>
+        <b>←</b>
 
-        <span class="action-title">
+      </button>
+
+
+      <!-- كرة القدم -->
+
+      <button id="footballBtn"
+              class="action-card football-card glass">
+
+        <div class="football-card-top">
+
+          <div class="card-icon football-icon">
+            ⚽
+          </div>
+
+          <div class="live-badge">
+            LIVE
+          </div>
+
+        </div>
+
+        <strong>
           كورة مباشر
+        </strong>
+
+        <span>
+          النتائج والمباريات الشغالة الآن
         </span>
 
-        <span class="action-desc">
-          المباريات الجارية والنتائج ومباريات اليوم والقادمة.
-        </span>
-
-        <span class="action-go">←</span>
-
-      </button>
-
-
-      <!-- الرسالة -->
-      <button class="action-card glass full" id="messageBtn">
-
-        <span class="action-icon">✉</span>
-
-        <span class="action-title">
-          رسالة خاصة للمطور
-        </span>
-
-        <span class="action-desc">
-          اكتب رسالتك وأرسلها مباشرة عبر Telegram
-        </span>
-
-        <span class="action-go">←</span>
+        <b>←</b>
 
       </button>
 
@@ -173,46 +202,51 @@
     <section class="ideas-card glass">
 
       <div>
-        <span class="section-tag">قريباً</span>
+
+        <span class="section-tag">
+          قريباً
+        </span>
 
         <h3>
-          أفكار للتطوير
+          مزيد من التطوير
         </h3>
 
         <p>
-          إشعارات، شروحات منظمة، تخصيص الواجهة،
-          ومزايا جديدة حسب احتياجك.
+          إشعارات المباريات، تفاصيل الفرق،
+          الأحداث والإحصائيات وغيرها.
         </p>
+
       </div>
 
-      <span class="idea-symbol">✦</span>
+      <div class="idea-icon">
+        ⚡
+      </div>
 
     </section>
 
 
-    <footer class="footer">
+    <footer>
       ود فيصل • 2026
     </footer>
 
   </main>
 
 
-  <!-- =========================
-       قسم كرة القدم
-  ========================== -->
-  <section id="footballScreen" class="screen inner-screen football-screen">
+  <!-- ========================= -->
+  <!-- صفحة كرة القدم -->
+  <!-- ========================= -->
 
-    <header class="topbar glass football-topbar">
+  <main id="footballScreen"
+        class="screen football-screen">
 
-      <button
-        class="icon-btn back-btn"
-        id="backFootballHomeBtn"
-        aria-label="رجوع"
-      >
+    <header class="topbar glass">
+
+      <button id="backFootballBtn"
+              class="icon-btn back-btn">
         →
       </button>
 
-      <div class="page-title football-page-title">
+      <div class="page-title">
 
         <strong>
           ⚽ كورة مباشر
@@ -224,166 +258,131 @@
 
       </div>
 
-      <button
-        class="icon-btn notification-btn"
-        id="footballNotifyBtn"
-        aria-label="تنبيهات المباريات"
-      >
-        🔔
+      <button id="refreshFootballBtn"
+              class="icon-btn">
+        ↻
       </button>
 
     </header>
 
 
-    <!-- ملخص القسم -->
-    <section class="football-summary glass">
+    <!-- حالة الاتصال -->
 
-      <div class="football-summary-top">
+    <section class="football-header glass">
 
-        <div>
+      <div>
 
-          <span class="section-tag">
-            كرة القدم
-          </span>
+        <span class="section-tag">
+          LIVE SCORE
+        </span>
 
-          <h2>
-            المباريات الآن
-          </h2>
+        <h2>
+          مباريات العالم
+        </h2>
 
-          <p id="footballDateText">
-            جاري تحميل التاريخ...
-          </p>
-
-        </div>
-
-        <button
-          class="refresh-btn"
-          id="footballRefreshBtn"
-          aria-label="تحديث المباريات"
-        >
-          ↻
-        </button>
+        <p id="footballUpdated">
+          جاري تحديث النتائج...
+        </p>
 
       </div>
 
-
-      <div class="football-stats">
-
-        <div class="football-stat">
-          <strong id="liveCount">0</strong>
-          <span>مباشر</span>
-        </div>
-
-        <div class="football-stat">
-          <strong id="todayCount">0</strong>
-          <span>اليوم</span>
-        </div>
-
-        <div class="football-stat">
-          <strong id="upcomingCount">0</strong>
-          <span>قادم</span>
-        </div>
-
-      </div>
-
-
-      <div class="football-update-row">
-
-        <span id="footballApiStatus">
-          جاهز
-        </span>
-
-        <span id="footballLastUpdate">
-          لم يتم التحديث بعد
-        </span>
-
+      <div class="ball-big">
+        ⚽
       </div>
 
     </section>
 
 
-    <!-- أزرار التبويب -->
+    <!-- التبويبات -->
+
     <div class="football-tabs">
 
-      <button
-        class="football-tab active"
-        data-football-tab="live"
-      >
+      <button class="football-tab active"
+              data-tab="live">
         🔴 مباشر
       </button>
 
-      <button
-        class="football-tab"
-        data-football-tab="today"
-      >
+      <button class="football-tab"
+              data-tab="today">
         📅 اليوم
       </button>
 
-      <button
-        class="football-tab"
-        data-football-tab="upcoming"
-      >
-        ⏳ القادم
+      <button class="football-tab"
+              data-tab="upcoming">
+        ⏰ القادمة
       </button>
 
     </div>
 
 
-    <!-- البطولات -->
-    <section
-      id="footballCompetitions"
-      class="competitions-section"
-    ></section>
+    <!-- تحميل -->
+
+    <div id="footballLoading"
+         class="football-loading">
+
+      <div class="loader"></div>
+
+      <p>
+        جاري جلب مباريات كرة القدم...
+      </p>
+
+    </div>
 
 
-    <!-- محتوى المباريات -->
-    <section id="footballMatches">
+    <!-- النتائج -->
 
-      <div class="football-loading glass">
-        <div class="loading-spinner"></div>
-
-        <strong>
-          جاري جلب المباريات
-        </strong>
-
-        <span>
-          انتظر لحظات...
-        </span>
-      </div>
+    <section id="footballList"
+             class="football-list">
 
     </section>
 
 
-    <div class="football-footer-note">
+    <!-- لا توجد مباريات -->
 
-      <span>🔄</span>
+    <div id="footballEmpty"
+         class="football-empty hidden">
 
-      <span>
-        البيانات من API-Football
-      </span>
+      <div>
+        ⚽
+      </div>
+
+      <h3>
+        لا توجد مباريات حالياً
+      </h3>
+
+      <p>
+        سنعرض المباريات هنا تلقائياً
+        عند توفرها.
+      </p>
 
     </div>
 
-  </section>
+
+    <div class="football-note">
+
+      <span>🔄</span>
+
+      النتائج المباشرة يتم تحديثها تلقائياً.
+
+    </div>
+
+  </main>
 
 
-  <!-- =========================
-       نافذة المطور
-  ========================== -->
-  <section
-    id="developerModal"
-    class="modal"
-    aria-hidden="true"
-  >
+  <!-- ========================= -->
+  <!-- نافذة المطور -->
+  <!-- ========================= -->
+
+  <section id="developerModal"
+           class="modal"
+           aria-hidden="true">
 
     <div class="modal-backdrop"></div>
 
     <div class="modal-card glass">
 
-      <button
-        class="close-btn"
-        data-close="developerModal"
-      >
+      <button class="close-btn"
+              data-close="developerModal">
         ×
       </button>
 
@@ -403,7 +402,6 @@
         للتواصل والاستفسارات والاقتراحات
       </p>
 
-
       <div class="info-row">
 
         <span>
@@ -416,19 +414,14 @@
 
       </div>
 
-
-      <button
-        class="primary-btn small"
-        id="openDeveloperBtn"
-      >
+      <button id="openDeveloperBtn"
+              class="primary-btn small">
         فتح حساب المطور
       </button>
 
-      <button
-        class="secondary-btn"
-        id="copyDeveloperBtn"
-      >
-        نسخ المعرف
+      <button id="copyDeveloperBtn"
+              class="secondary-btn">
+        نسخ معرف المطور
       </button>
 
     </div>
@@ -436,28 +429,28 @@
   </section>
 
 
-  <!-- =========================
-       صفحة الرسالة
-  ========================== -->
-  <section id="messageScreen" class="screen inner-screen">
+  <!-- ========================= -->
+  <!-- رسالة للمطور -->
+  <!-- ========================= -->
+
+  <section id="messageScreen"
+           class="screen inner-screen">
 
     <header class="topbar glass">
 
-      <button
-        class="icon-btn back-btn"
-        id="backHomeBtn"
-      >
+      <button id="backHomeBtn"
+              class="icon-btn back-btn">
         →
       </button>
 
       <div class="page-title">
 
         <strong>
-          رسالة خاصة للمطور
+          رسالة خاصة
         </strong>
 
         <span>
-          اكتب رسالتك هنا
+          أرسل فكرتك للمطور
         </span>
 
       </div>
@@ -488,42 +481,34 @@
       </div>
 
 
-      <label for="messageInput">
-        رسالتك
+      <label>
+        فكرتك أو رسالتك
       </label>
 
-
-      <textarea
-        id="messageInput"
-        maxlength="800"
-        placeholder="اكتب رسالتك أو اقتراحك هنا..."
-      ></textarea>
-
+      <textarea id="messageInput"
+                maxlength="800"
+                placeholder="مثلاً:
+عندي فكرة لإضافة جديدة للتطبيق..."></textarea>
 
       <div class="char-count">
         <span id="charCount">0</span>/800
       </div>
 
-
-      <button
-        class="primary-btn"
-        id="sendMessageBtn"
-      >
+      <button id="sendMessageBtn"
+              class="primary-btn">
 
         <span>
-          إرسال الرسالة في Telegram
+          إرسال للمطور
         </span>
 
-        <span class="btn-arrow">
+        <span>
           ←
         </span>
 
       </button>
 
-
       <p class="helper">
-        عند الضغط على الإرسال سيتم فتح Telegram
-        مع كتابة الرسالة تلقائياً.
+        سيتم فتح Telegram وإرفاق الرسالة تلقائياً.
       </p>
 
     </div>
@@ -531,25 +516,26 @@
   </section>
 
 
-  <!-- =========================
-       حول التطبيق
-  ========================== -->
-  <section
-    id="aboutModal"
-    class="modal"
-    aria-hidden="true"
-  >
+  <!-- ========================= -->
+  <!-- حول التطبيق -->
+  <!-- ========================= -->
+
+  <section id="aboutModal"
+           class="modal"
+           aria-hidden="true">
 
     <div class="modal-backdrop"></div>
 
     <div class="modal-card glass">
 
-      <button
-        class="close-btn"
-        data-close="aboutModal"
-      >
+      <button class="close-btn"
+              data-close="aboutModal">
         ×
       </button>
+
+      <div class="about-logo">
+        ⚽
+      </div>
 
       <span class="section-tag">
         حول التطبيق
@@ -560,37 +546,30 @@
       </h2>
 
       <p class="about-text">
-        تطبيق خفيف وسريع للوصول إلى القناة
-        والتواصل مع المطور ومتابعة كرة القدم
-        من مكان واحد، مع واجهة عربية مصممة للموبايل.
+        تطبيق خفيف وسريع يجمع بين التواصل
+        ومتابعة كرة القدم في مكان واحد.
       </p>
-
 
       <div class="feature-list">
 
         <div>
-          <span>✓</span>
-          واجهة عربية RTL
+          ✓ واجهة عربية RTL
         </div>
 
         <div>
-          <span>✓</span>
-          أزرار واضحة وسريعة
+          ✓ نتائج كرة القدم المباشرة
         </div>
 
         <div>
-          <span>✓</span>
-          تواصل مباشر عبر Telegram
+          ✓ مباريات اليوم والقادمة
         </div>
 
         <div>
-          <span>✓</span>
-          مباريات ونتائج كرة القدم
+          ✓ تواصل مباشر مع المطور
         </div>
 
         <div>
-          <span>✓</span>
-          قابل للتطوير مستقبلاً
+          ✓ قابل للتطوير مستقبلاً
         </div>
 
       </div>
@@ -601,7 +580,10 @@
 
 
   <!-- Toast -->
-  <div id="toast" class="toast"></div>
+
+  <div id="toast"
+       class="toast">
+  </div>
 
 
   <script src="script.js"></script>
