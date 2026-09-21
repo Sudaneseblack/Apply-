@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy Website
+    name: Deploy Wad Faisal
     runs-on: ubuntu-latest
 
     environment:
@@ -29,14 +29,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v6
 
       - name: Upload Website
         uses: actions/upload-pages-artifact@v4
         with:
-          path: "."
+          path: .
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
