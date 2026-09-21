@@ -1,172 +1,1527 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#07111f">
 
-    <title>ود فيصل | VIP</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <meta
+        name="theme-color"
+        content="#050b18"
+    >
+
+    <meta
+        name="mobile-web-app-capable"
+        content="yes"
+    >
+
+    <title>ود فيصل</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
+
 
 <body>
 
-    <!-- الخلفية -->
-    <div class="background">
-        <div class="orb orb1"></div>
-        <div class="orb orb2"></div>
-        <div class="stars">✦　·　✧　·　✦　·　✧</div>
-    </div>
+<!-- =====================================================
+     APP
+===================================================== -->
 
-    <!-- التطبيق -->
-    <main class="app">
+<div id="app">
 
-        <!-- الشعار -->
-        <section class="header">
-            <div class="logo">✈</div>
 
-            <div class="vip">VIP ACCESS</div>
+    <!-- =================================================
+         SPLASH SCREEN
+    ================================================== -->
 
-            <h1>ود <span>فيصل</span></h1>
+    <section
+        id="splashScreen"
+        class="screen splash-screen active"
+    >
 
-            <p>
-                مرحباً بك في التطبيق الرسمي
+        <div class="splash-glow glow-one"></div>
+        <div class="splash-glow glow-two"></div>
+
+        <div class="splash-content">
+
+            <div class="logo-wrap splash-logo">
+
+                <div class="logo-ring"></div>
+
+                <div class="logo-box">
+                    و
+                </div>
+
+            </div>
+
+
+            <h1 class="splash-title">
+                ود فيصل
+            </h1>
+
+
+            <p class="splash-subtitle">
+                أهلاً بك في عالمنا
             </p>
 
-            <small>
-                كل ما تحتاجه في مكان واحد
-            </small>
-        </section>
 
+            <div class="loading-area">
 
-        <!-- الصفحة الرئيسية -->
-        <section id="home" class="page active">
+                <div class="loading-text">
+                    <span id="loadingText">
+                        جاري تجهيز التطبيق
+                    </span>
 
-            <button class="menu-button channel" onclick="openChannel()">
-                <div class="button-icon">📢</div>
-
-                <div class="button-text">
-                    <strong>دخول إلى القناة</strong>
-                    <span>انتقل إلى قناتي على Telegram</span>
+                    <strong id="loadingPercent">
+                        0%
+                    </strong>
                 </div>
 
-                <div class="arrow">‹</div>
-            </button>
 
+                <div class="loading-track">
 
-            <button class="menu-button tutorials" onclick="showPage('tutorials')">
-                <div class="button-icon">📚</div>
+                    <div
+                        id="loadingBar"
+                        class="loading-bar"
+                    ></div>
 
-                <div class="button-text">
-                    <strong>شروحات القناة</strong>
-                    <span>تعرف على الخدمات وطريقة الاستخدام</span>
                 </div>
 
-                <div class="arrow">‹</div>
-            </button>
 
+                <div class="loading-dots">
 
-            <button class="menu-button private" onclick="openPrivate()">
-                <div class="button-icon">💬</div>
+                    <span></span>
+                    <span></span>
+                    <span></span>
 
-                <div class="button-text">
-                    <strong>رسالة خاصة</strong>
-                    <span>تواصل مباشرة مع المطور</span>
                 </div>
 
-                <div class="arrow">‹</div>
-            </button>
+            </div>
 
-        </section>
+        </div>
 
 
-        <!-- صفحة الشروحات -->
-        <section id="tutorials" class="page">
+        <div class="splash-version">
+            الإصدار 1.0.0
+        </div>
 
-            <button class="back-button" onclick="showPage('home')">
-                → العودة للرئيسية
-            </button>
+    </section>
 
-            <div class="page-title">
-                <div class="title-icon">📚</div>
-                <h2>شروحات القناة</h2>
-                <p>اختر الشرح الذي تريد قراءته</p>
+
+
+    <!-- =================================================
+         LOGIN
+    ================================================== -->
+
+    <section
+        id="loginScreen"
+        class="screen login-screen"
+    >
+
+        <div class="login-background">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </div>
+
+
+        <div class="login-container">
+
+            <div class="logo-wrap login-logo">
+
+                <div class="logo-ring"></div>
+
+                <div class="logo-box">
+                    و
+                </div>
+
             </div>
 
 
-            <div class="tutorial-card" onclick="showTutorial(1)">
-                <span>01</span>
-                <div>
-                    <strong>التعريف بالقناة</strong>
-                    <small>تعرف على القناة والخدمات الموجودة فيها</small>
-                </div>
-            </div>
+            <div class="login-title-area">
 
-
-            <div class="tutorial-card" onclick="showTutorial(2)">
-                <span>02</span>
-                <div>
-                    <strong>طريقة الاستخدام</strong>
-                    <small>شرح مبسط لكيفية استخدام خدماتنا</small>
-                </div>
-            </div>
-
-
-            <div class="tutorial-card" onclick="showTutorial(3)">
-                <span>03</span>
-                <div>
-                    <strong>الأسئلة الشائعة</strong>
-                    <small>أهم الأسئلة والإجابات</small>
-                </div>
-            </div>
-
-
-            <div id="tutorial-content" class="tutorial-content"></div>
-
-        </section>
-
-
-        <!-- معلومات الرسالة الخاصة -->
-        <section id="private" class="page">
-
-            <button class="back-button" onclick="showPage('home')">
-                → العودة للرئيسية
-            </button>
-
-            <div class="private-box">
-
-                <div class="private-icon">💬</div>
-
-                <h2>رسالة خاصة</h2>
+                <h1>
+                    ود فيصل
+                </h1>
 
                 <p>
-                    يمكنك التواصل مباشرة مع المطور عبر Telegram.
+                    أهلاً وسهلاً بك
                 </p>
 
-                <textarea id="message"
-                    placeholder="اكتب رسالتك هنا...">السلام عليكم، أريد التواصل معك بخصوص القناة.</textarea>
+                <small>
+                    تواصل معنا بسهولة وسرعة
+                </small>
 
-                <button class="send-button" onclick="sendTelegramMessage()">
-                    فتح Telegram وإرسال الرسالة
+            </div>
+
+
+            <div class="login-card">
+
+                <div class="welcome-icon">
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <path
+                            d="M20 11.5C20 16.1944 16.1944 20 11.5 20C9.928 20 8.458 19.573 7.2 18.83L4 20L5.17 16.8C4.427 15.542 4 14.072 4 12.5C4 7.80558 7.80558 4 12.5 4C17.1944 4 20 6.80558 20 11.5Z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                </div>
+
+
+                <h2>
+                    مرحباً بك 👋
+                </h2>
+
+                <p>
+                    التطبيق الرسمي للتواصل مع
+                    <strong>ود فيصل</strong>
+                </p>
+
+
+                <button
+                    id="enterButton"
+                    class="primary-button"
+                    type="button"
+                >
+
+                    <span>
+                        دخول إلى التطبيق
+                    </span>
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+                        <path
+                            d="M9 18L15 12L9 6"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+
                 </button>
 
             </div>
 
-        </section>
+
+            <div class="login-features">
+
+                <div>
+                    <span>⚡</span>
+                    سريع
+                </div>
+
+                <div>
+                    <span>🔒</span>
+                    بسيط
+                </div>
+
+                <div>
+                    <span>♥</span>
+                    تواصل
+                </div>
+
+            </div>
 
 
-        <!-- التذييل -->
-        <footer>
-            <div>ود فيصل</div>
-            <small>VIP • Telegram Community</small>
-            <p>© 2026 جميع الحقوق محفوظة</p>
-        </footer>
+            <div class="login-version">
+                Version 1.0.0
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =================================================
+         MAIN APP
+    ================================================== -->
+
+    <main
+        id="mainApp"
+        class="main-app"
+    >
+
+
+        <!-- =============================================
+             TOP BAR
+        ============================================== -->
+
+        <header class="top-bar">
+
+            <div class="brand">
+
+                <div class="mini-logo">
+                    و
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        ود فيصل
+                    </strong>
+
+                    <span>
+                        أهلاً بك 👋
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="notificationButton"
+                class="icon-button notification-button"
+                type="button"
+                aria-label="الإشعارات"
+            >
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                >
+                    <path
+                        d="M18 9C18 5.68629 15.3137 3 12 3C8.68629 3 6 5.68629 6 9C6 16 3 16 3 18H21C21 16 18 16 18 9Z"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <path
+                        d="M10 21H14"
+                        stroke="currentColor"
+                        stroke-width="1.7"
+                        stroke-linecap="round"
+                    />
+                </svg>
+
+                <span
+                    id="notificationBadge"
+                    class="notification-badge"
+                >
+                    1
+                </span>
+
+            </button>
+
+        </header>
+
+
+
+        <!-- =============================================
+             SCREENS
+        ============================================== -->
+
+        <div class="content-area">
+
+
+            <!-- =========================================
+                 HOME
+            ========================================== -->
+
+            <section
+                id="homePage"
+                class="page active-page"
+            >
+
+                <div class="hero-card">
+
+                    <div class="hero-decoration one"></div>
+                    <div class="hero-decoration two"></div>
+
+                    <div class="hero-content">
+
+                        <span class="hero-label">
+                            مرحباً بك
+                        </span>
+
+                        <h1>
+                            شنو عايز تعمل؟
+                        </h1>
+
+                        <p>
+                            اختر الخدمة التي تريد الوصول إليها
+                        </p>
+
+                    </div>
+
+
+                    <div class="hero-symbol">
+                        و
+                    </div>
+
+                </div>
+
+
+                <div class="section-title">
+
+                    <div>
+                        <span>
+                            الخدمات
+                        </span>
+
+                        <small>
+                            اختر من هنا
+                        </small>
+                    </div>
+
+                </div>
+
+
+                <!-- SERVICE GRID -->
+
+                <div class="service-grid">
+
+
+                    <!-- CHANNEL -->
+
+                    <button
+                        class="service-card blue-card"
+                        data-action="channel"
+                        type="button"
+                    >
+
+                        <div class="service-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+                                <path
+                                    d="M21 4L3 11L10 13L12 20L15 15L19 18L21 4Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="service-info">
+
+                            <strong>
+                                القناة
+                            </strong>
+
+                            <span>
+                                تابع آخر الأخبار
+                            </span>
+
+                        </div>
+
+
+                        <span class="card-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- DEVELOPER -->
+
+                    <button
+                        class="service-card purple-card"
+                        data-action="developer"
+                        type="button"
+                    >
+
+                        <div class="service-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+
+                                <circle
+                                    cx="12"
+                                    cy="8"
+                                    r="3.2"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                />
+
+                                <path
+                                    d="M5 20C5.6 15.9 8 14 12 14C16 14 18.4 15.9 19 20"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="service-info">
+
+                            <strong>
+                                المطور
+                            </strong>
+
+                            <span>
+                                تواصل مع المطور
+                            </span>
+
+                        </div>
+
+
+                        <span class="card-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <button
+                        class="service-card green-card"
+                        data-action="message"
+                        type="button"
+                    >
+
+                        <div class="service-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+
+                                <path
+                                    d="M20 11.5C20 16.1944 16.1944 20 11.5 20C9.928 20 8.458 19.573 7.2 18.83L4 20L5.17 16.8C4.427 15.542 4 14.072 4 12.5C4 7.80558 7.80558 4 12.5 4C17.1944 4 20 6.80558 20 11.5Z"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linejoin="round"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="service-info">
+
+                            <strong>
+                                رسالة خاصة
+                            </strong>
+
+                            <span>
+                                أرسل رسالة للمطور
+                            </span>
+
+                        </div>
+
+
+                        <span class="card-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- ABOUT -->
+
+                    <button
+                        class="service-card orange-card"
+                        data-action="about"
+                        type="button"
+                    >
+
+                        <div class="service-icon">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                            >
+
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="8.5"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                />
+
+                                <path
+                                    d="M12 10.5V16"
+                                    stroke="currentColor"
+                                    stroke-width="1.7"
+                                    stroke-linecap="round"
+                                />
+
+                                <circle
+                                    cx="12"
+                                    cy="7.5"
+                                    r="1"
+                                    fill="currentColor"
+                                />
+
+                            </svg>
+
+                        </div>
+
+
+                        <div class="service-info">
+
+                            <strong>
+                                حول التطبيق
+                            </strong>
+
+                            <span>
+                                معلومات التطبيق
+                            </span>
+
+                        </div>
+
+
+                        <span class="card-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <!-- QUICK FEATURES -->
+
+                <div class="quick-card">
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            ⚡
+                        </span>
+
+                        <span>
+                            سريع
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-line"></div>
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            🔒
+                        </span>
+
+                        <span>
+                            بسيط
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-line"></div>
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            ♥
+                        </span>
+
+                        <span>
+                            تواصل
+                        </span>
+
+                    </div>
+
+
+                    <div class="quick-line"></div>
+
+
+                    <div class="quick-item">
+
+                        <span class="quick-icon">
+                            🚀
+                        </span>
+
+                        <span>
+                            مستمر
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =========================================
+                 CONTACT
+            ========================================== -->
+
+            <section
+                id="contactPage"
+                class="page"
+            >
+
+                <div class="page-heading">
+
+                    <span class="heading-icon">
+                        💬
+                    </span>
+
+                    <div>
+
+                        <h1>
+                            تواصل معنا
+                        </h1>
+
+                        <p>
+                            نحن هنا للتواصل معك
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="contact-list">
+
+
+                    <button
+                        class="contact-item"
+                        data-action="channel"
+                        type="button"
+                    >
+
+                        <div class="contact-icon telegram">
+                            ✈
+                        </div>
+
+                        <div class="contact-info">
+
+                            <strong>
+                                قناة ود فيصل
+                            </strong>
+
+                            <span>
+                                تابع القناة على Telegram
+                            </span>
+
+                        </div>
+
+                        <span class="contact-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="contact-item"
+                        data-action="developer"
+                        type="button"
+                    >
+
+                        <div class="contact-icon person">
+                            👤
+                        </div>
+
+                        <div class="contact-info">
+
+                            <strong>
+                                المطور
+                            </strong>
+
+                            <span>
+                                @mohmmedfysal
+                            </span>
+
+                        </div>
+
+                        <span class="contact-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        class="contact-item"
+                        data-action="message"
+                        type="button"
+                    >
+
+                        <div class="contact-icon message">
+                            💬
+                        </div>
+
+                        <div class="contact-info">
+
+                            <strong>
+                                رسالة خاصة
+                            </strong>
+
+                            <span>
+                                أرسل رسالة مباشرة
+                            </span>
+
+                        </div>
+
+                        <span class="contact-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <button
+                        id="copyDeveloperButton"
+                        class="contact-item"
+                        type="button"
+                    >
+
+                        <div class="contact-icon copy">
+                            ⧉
+                        </div>
+
+                        <div class="contact-info">
+
+                            <strong>
+                                نسخ معرف المطور
+                            </strong>
+
+                            <span>
+                                @mohmmedfysal
+                            </span>
+
+                        </div>
+
+                        <span class="contact-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="contact-note">
+
+                    <span>
+                        ♥
+                    </span>
+
+                    <p>
+                        يسعدنا تواصلك معنا، ونسعد بخدمتك دائماً.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 SETTINGS
+            ========================================== -->
+
+            <section
+                id="settingsPage"
+                class="page"
+            >
+
+                <div class="page-heading">
+
+                    <span class="heading-icon">
+                        ⚙
+                    </span>
+
+                    <div>
+
+                        <h1>
+                            الإعدادات
+                        </h1>
+
+                        <p>
+                            تحكم في تجربة التطبيق
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="settings-group">
+
+                    <div class="settings-title">
+                        التطبيق
+                    </div>
+
+
+                    <!-- NOTIFICATIONS -->
+
+                    <div class="setting-row">
+
+                        <div class="setting-icon notification-setting">
+                            🔔
+                        </div>
+
+                        <div class="setting-info">
+
+                            <strong>
+                                التنبيهات
+                            </strong>
+
+                            <span>
+                                تنبيهات داخل التطبيق
+                            </span>
+
+                        </div>
+
+
+                        <label class="switch">
+
+                            <input
+                                id="notificationToggle"
+                                type="checkbox"
+                                checked
+                            >
+
+                            <span class="slider"></span>
+
+                        </label>
+
+                    </div>
+
+
+
+                    <!-- THEME -->
+
+                    <div class="setting-row">
+
+                        <div class="setting-icon theme-setting">
+                            ◐
+                        </div>
+
+                        <div class="setting-info">
+
+                            <strong>
+                                المظهر
+                            </strong>
+
+                            <span id="themeText">
+                                الوضع الداكن
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            id="themeToggle"
+                            class="small-action"
+                            type="button"
+                        >
+                            تغيير
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- SHARE -->
+
+                    <button
+                        id="shareButton"
+                        class="setting-row setting-button"
+                        type="button"
+                    >
+
+                        <div class="setting-icon share-setting">
+                            ↗
+                        </div>
+
+                        <div class="setting-info">
+
+                            <strong>
+                                مشاركة التطبيق
+                            </strong>
+
+                            <span>
+                                شارك ود فيصل مع أصدقائك
+                            </span>
+
+                        </div>
+
+                        <span class="setting-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+
+
+                    <!-- UPDATE -->
+
+                    <button
+                        id="updateButton"
+                        class="setting-row setting-button"
+                        type="button"
+                    >
+
+                        <div class="setting-icon update-setting">
+                            ↻
+                        </div>
+
+                        <div class="setting-info">
+
+                            <strong>
+                                التحقق من التحديث
+                            </strong>
+
+                            <span>
+                                الإصدار الحالي 1.0.0
+                            </span>
+
+                        </div>
+
+                        <span class="setting-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+
+                <div class="settings-group">
+
+                    <div class="settings-title">
+                        معلومات
+                    </div>
+
+
+                    <button
+                        id="aboutSettingsButton"
+                        class="setting-row setting-button"
+                        type="button"
+                    >
+
+                        <div class="setting-icon about-setting">
+                            ⓘ
+                        </div>
+
+                        <div class="setting-info">
+
+                            <strong>
+                                حول ود فيصل
+                            </strong>
+
+                            <span>
+                                معلومات التطبيق والمطور
+                            </span>
+
+                        </div>
+
+                        <span class="setting-arrow">
+                            ‹
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="settings-footer">
+
+                    <div class="footer-logo">
+                        و
+                    </div>
+
+                    <strong>
+                        ود فيصل
+                    </strong>
+
+                    <span>
+                        الإصدار 1.0.0
+                    </span>
+
+                    <small>
+                        صنع بحب ♥
+                    </small>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+
+        <!-- =============================================
+             BOTTOM NAVIGATION
+        ============================================== -->
+
+        <nav class="bottom-nav">
+
+            <button
+                class="nav-item active"
+                data-page="homePage"
+                type="button"
+            >
+
+                <span class="nav-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M3 10.5L12 3L21 10.5V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V10.5Z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                        <path
+                            d="M9 21V14H15V21"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    الرئيسية
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="nav-item"
+                data-page="contactPage"
+                type="button"
+            >
+
+                <span class="nav-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M20 11.5C20 16.1944 16.1944 20 11.5 20C9.928 20 8.458 19.573 7.2 18.83L4 20L5.17 16.8C4.427 15.542 4 14.072 4 12.5C4 7.80558 7.80558 4 12.5 4C17.1944 4 20 6.80558 20 11.5Z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    تواصل
+                </span>
+
+            </button>
+
+
+
+            <button
+                class="nav-item"
+                data-page="settingsPage"
+                type="button"
+            >
+
+                <span class="nav-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                    >
+
+                        <path
+                            d="M12 15.2C13.7673 15.2 15.2 13.7673 15.2 12C15.2 10.2327 13.7673 8.8 12 8.8C10.2327 8.8 8.8 10.2327 8.8 12C8.8 13.7673 10.2327 15.2 12 15.2Z"
+                            stroke="currentColor"
+                            stroke-width="1.7"
+                        />
+
+                        <path
+                            d="M19.4 15C19.5 14.7 19.7 14.3 19.8 14L21 13L20 10.5L18.7 10.3C18.5 9.9 18.3 9.5 18 9.2L18.2 7.9L16 6.5L15 7.3C14.6 7.1 14.2 7 13.8 6.9L13.2 5.6H10.6L10 6.9C9.6 7 9.2 7.1 8.8 7.3L7.8 6.5L5.6 7.9L5.8 9.2C5.5 9.5 5.3 9.9 5.1 10.3L3.8 10.5L2.8 13L4 14C4.1 14.3 4.3 14.7 4.4 15L4 16.3L6.2 17.7L7.2 16.9C7.6 17.1 8 17.2 8.4 17.3L9 18.6H11.6L12.2 17.3C12.6 17.2 13 17.1 13.4 16.9L14.4 17.7L16.6 16.3L16.4 15C16.7 14.7 16.9 14.3 17.1 14L18.4 13.8L19.4 15Z"
+                            stroke="currentColor"
+                            stroke-width="1.3"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </span>
+
+                <span>
+                    الإعدادات
+                </span>
+
+            </button>
+
+        </nav>
 
     </main>
 
 
-    <script src="script.js"></script>
+
+    <!-- =================================================
+         NOTIFICATION PANEL
+    ================================================== -->
+
+    <div
+        id="notificationPanel"
+        class="overlay"
+    >
+
+        <div class="notification-sheet">
+
+            <div class="sheet-handle"></div>
+
+
+            <div class="sheet-header">
+
+                <div>
+
+                    <strong>
+                        الإشعارات
+                    </strong>
+
+                    <span>
+                        آخر التنبيهات
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="closeNotification"
+                    class="close-button"
+                    type="button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="notification-card">
+
+                <div class="notification-image">
+
+                    <div class="notification-image-logo">
+                        و
+                    </div>
+
+                </div>
+
+
+                <div class="notification-content">
+
+                    <strong>
+                        أهلاً بك في ود فيصل 👋
+                    </strong>
+
+                    <p>
+                        استمتع بتجربة بسيطة وسريعة
+                        وتواصل معنا بسهولة.
+                    </p>
+
+                    <span>
+                        الآن
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         ABOUT MODAL
+    ================================================== -->
+
+    <div
+        id="aboutModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-card">
+
+            <button
+                class="modal-close"
+                data-close-modal
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div class="modal-logo">
+                و
+            </div>
+
+
+            <h2>
+                ود فيصل
+            </h2>
+
+
+            <span class="modal-version">
+                الإصدار 1.0.0
+            </span>
+
+
+            <p>
+                تطبيق بسيط وسريع لتسهيل الوصول
+                إلى القناة والتواصل مع المطور.
+            </p>
+
+
+            <div class="about-list">
+
+                <div>
+                    <span>⚡</span>
+                    سرعة وسهولة الاستخدام
+                </div>
+
+                <div>
+                    <span>🔒</span>
+                    تصميم بسيط ومريح
+                </div>
+
+                <div>
+                    <span>♥</span>
+                    تجربة مخصصة للموبايل
+                </div>
+
+            </div>
+
+
+            <button
+                class="primary-button modal-button"
+                data-close-modal
+                type="button"
+            >
+                حسناً
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         DEVELOPER MODAL
+    ================================================== -->
+
+    <div
+        id="developerModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-card developer-modal">
+
+            <button
+                class="modal-close"
+                data-close-modal
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div class="developer-avatar">
+                👤
+            </div>
+
+
+            <h2>
+                المطور
+            </h2>
+
+
+            <p class="developer-id">
+                @mohmmedfysal
+            </p>
+
+
+            <div class="developer-actions">
+
+                <button
+                    id="developerTelegramButton"
+                    class="primary-button"
+                    type="button"
+                >
+                    فتح Telegram
+                </button>
+
+
+                <button
+                    id="developerCopyButton"
+                    class="secondary-button"
+                    type="button"
+                >
+                    نسخ المعرف
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         MESSAGE MODAL
+    ================================================== -->
+
+    <div
+        id="messageModal"
+        class="modal-overlay"
+    >
+
+        <div class="modal-card message-modal">
+
+            <button
+                class="modal-close"
+                data-close-modal
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div class="message-icon">
+                💬
+            </div>
+
+
+            <h2>
+                رسالة خاصة
+            </h2>
+
+
+            <p>
+                اكتب رسالتك وسيتم فتح Telegram لإرسالها.
+            </p>
+
+
+            <textarea
+                id="messageInput"
+                maxlength="500"
+                placeholder="اكتب رسالتك هنا..."
+            ></textarea>
+
+
+            <div class="message-counter">
+
+                <span>
+                    الرسالة
+                </span>
+
+                <strong>
+                    <span id="messageCount">
+                        0
+                    </span>
+                    / 500
+                </strong>
+
+            </div>
+
+
+            <button
+                id="sendMessageButton"
+                class="primary-button"
+                type="button"
+            >
+
+                إرسال الرسالة
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         TOAST
+    ================================================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    >
+
+        <span
+            id="toastIcon"
+            class="toast-icon"
+        >
+            ✓
+        </span>
+
+        <span
+            id="toastMessage"
+        >
+            تم
+        </span>
+
+    </div>
+
+</div>
+
+
+<script src="script.js"></script>
 
 </body>
+
 </html>
